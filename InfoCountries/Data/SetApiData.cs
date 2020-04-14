@@ -11,6 +11,9 @@ using System.Windows;
 using System.Windows.Ink;
 using Svg;
 using System.Drawing.Imaging;
+using System.Drawing;
+using System.Windows.Media;
+using System.Threading;
 
 namespace InfoCountries.Data
 {
@@ -32,9 +35,9 @@ namespace InfoCountries.Data
             else
             {
                 await LoadAPICountries();
-                SaveFlagToDirectory();
+                await Task.Run(() => SaveFlagToDirectory());
             }
-            
+
         }
 
         private static async Task LoadAPICountries()
@@ -47,23 +50,77 @@ namespace InfoCountries.Data
 
         public static void SaveFlagToDirectory()
         {
-            string path = "FlagsImage";
-            Directory.CreateDirectory(path);
+            string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures);
+            string ImagePath = Path.Combine(rootPath, @"Images\");
 
-            foreach (var country in Countries)
+            if (!Directory.Exists(ImagePath))
             {
-                using (WebClient client = new WebClient())
+                Directory.CreateDirectory(ImagePath);
+            }
+            DirectoryInfo directory = new DirectoryInfo(ImagePath); 
+            if (directory.GetFiles().Length == 0)
+            {
+                foreach (var country in Countries)
                 {
-                    var flagImage = client.DownloadString(country.Flag);
-                    string pathFile = $@"{path}\{country.Name}.svg";
-                    File.WriteAllText(pathFile, flagImage);
+                    try
+                    {
+                        using (WebClient client = new WebClient())
+                        {
+                            var flagImage = client.DownloadString(country.Flag);
+                            string pathFile = $@"{ImagePath}{country.Name}.svg";
+                            File.WriteAllText(pathFile, flagImage);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                        MessageBox.Show(e.Message);
+                    }
+
                 }
+                GetImageFromDirectory();
             }
         }
 
-        public static async Task<List<Country>> GetCountriesList()
+        public static void GetImageFromDirectory()
+        {
+            string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures);
+            string ImagePath = Path.Combine(rootPath, @"Images\");
+            string path = Path.Combine(ImagePath, @"FlagImages\");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            var files = Directory.GetFiles(ImagePath);
+            if (files.Length>0)
+            {
+                foreach (var file in files)
+                {
+                    FileInfo datFile = new FileInfo(file);
+                    try
+                    {
+                        var svgDocument = SvgDocument.Open(datFile.FullName);
+                        using (var bitmap = svgDocument.Draw(100, 100))
+                        {
+                            bitmap.Save($"{path}{Path.GetFileNameWithoutExtension(file)}.{ImageFormat.Jpeg}");
+
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                        MessageBox.Show(e.Message);
+                    }
+                }
+
+            }
+        }
+
+        public static List<Country> GetCountriesList()
         {
             return Countries;
         }
+
     }
 }
+       
