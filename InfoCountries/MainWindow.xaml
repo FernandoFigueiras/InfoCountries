@@ -25,8 +25,7 @@
                     <ListBox Name="dataTemplate">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Image Source="{Binding Image}" Height="20" Width="20" Margin="10">
                                         </Image>
                                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
@@ -34,9 +33,7 @@
                                             <TextBlock Text="{Binding region}" FontSize="12"></TextBlock>
                                         </StackPanel>
                                     </StackPanel>
-                                
-                                
-                            </DataTemplate>
+                                  </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </ScrollViewer>

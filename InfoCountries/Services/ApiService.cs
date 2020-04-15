@@ -6,10 +6,8 @@
 	using System.Collections.Generic;
 	using System.Net.Http;
 	using System.Threading.Tasks;
-	using System.IO;
 
-
-    public class ApiService
+	public class ApiService
 	{
 
 		/// <summary>
@@ -18,7 +16,7 @@
 		/// <param name="baseUrl"></param>
 		/// <param name="controller"></param>
 		/// <returns>Class Response/object if Success</returns>
-		public async Task<Response> GetCountries(string baseUrl, string controller)
+		public async Task<Response> GetCountriesAsync(string baseUrl, string controller)
 		{
 			try
 			{

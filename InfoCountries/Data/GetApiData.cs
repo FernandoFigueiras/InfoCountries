@@ -1,0 +1,138 @@
+﻿namespace InfoCountries.Data
+{
+    using Models;
+    using Services;
+    using Svg;
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Threading.Tasks;
+    using System.Windows;
+
+    /// <summary>
+    /// This class is used to get and store data from the API
+    /// </summary>
+    public static class GetApiData
+    {
+
+        public static List<Country> Countries;
+
+        /// <summary>
+        /// Check the internet Connection, loads countries and saves flags trow calling methods
+        /// </summary>
+        /// <returns>Task</returns>
+        public static async Task LoadCountriesAsync()
+        {
+            NetworkService networkService = new NetworkService();
+            var connection = networkService.CheckConnection();
+
+            if (!connection.IsSuccess)
+            {
+                MessageBox.Show(connection.Message);
+                return;
+            }
+            else
+            {
+                await LoadAPICountriesAsync();
+                await SaveImagesFrompApiAsync();
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the list of countries from API
+        /// </summary>
+        /// <returns>Task</returns>
+        public static async Task<List<Country>> LoadAPICountriesAsync()
+        {
+            ApiService apiService = new ApiService();
+            var response = await apiService.GetCountriesAsync("http://restcountries.eu", "/rest/v2/all");
+            Countries = (List<Country>)response.Result;
+            return Countries;
+        }
+
+        /// <summary>
+        /// Gets flag images from API and stores as SVG in directory
+        /// </summary>
+        /// <returns>Task</returns>
+        public static async Task SaveImagesFrompApiAsync()
+        {
+            string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures);
+            string ImagePath = Path.Combine(rootPath, @"Images\");
+
+            if (!Directory.Exists(ImagePath))
+            {
+                Directory.CreateDirectory(ImagePath);
+            }
+            DirectoryInfo directory = new DirectoryInfo(ImagePath);
+
+            if (directory.GetFiles().Length == 0)
+            {
+                await Task.Run(() =>
+                {
+                    Parallel.ForEach<Country>(Countries, (country) =>
+                    {
+                        try
+                        {
+                            using (WebClient client = new WebClient())
+                            {
+                                var flagImage = client.DownloadString(country.Flag);
+                                string pathFile = $@"{ImagePath}{country.Name}.svg";
+                                File.WriteAllText(pathFile, flagImage);
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
+                    });
+                });
+                await SaveConvertedflagImagesAsync();
+            }
+        }
+
+        /// <summary>
+        /// Gets the Flag Images from the Directory, and stores the converted image into a new directory.
+        /// </summary>
+        /// <returns>Task</returns>
+        public static async Task SaveConvertedflagImagesAsync()
+        {
+            string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures);
+            string ImagePath = Path.Combine(rootPath, @"Images\");
+            string path = Path.Combine(ImagePath, @"FlagImages\");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            List<string> files = Directory.GetFiles(ImagePath).ToList();
+            if (files.Count > 0)
+            {
+                await Task.Run(() =>
+                {
+                    Parallel.ForEach<string>(files, (file) =>
+                    {
+                        FileInfo datFile = new FileInfo(file);
+                        try
+                        {
+                            var svgDocument = SvgDocument.Open(datFile.FullName);
+                            using (var bitmap = svgDocument.Draw(50, 50))
+                            {
+                                bitmap.Save($"{path}{Path.GetFileNameWithoutExtension(file)}.{ImageFormat.Jpeg}");
+
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    });
+                });
+            }
+        }
+    }
+}
+

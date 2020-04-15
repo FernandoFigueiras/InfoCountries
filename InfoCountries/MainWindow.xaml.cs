@@ -37,23 +37,8 @@
         public async void UISettings()
         {
             
-            await SetApiData.LoadCountries();
-            Countries = await Task.Run(()=> SetApiData.GetCountriesList()) ;
-            string PathImage = Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)}\Images\FlagImages");
-            DirectoryInfo dir = new DirectoryInfo(PathImage);
-            var files = dir.GetFiles();
-
-            foreach (Country country in Countries)
-            {
-                
-                foreach (var file in files)
-                {
-                    if (file.Name.Contains(country.Name))
-                    {
-                        country.Image = new BitmapImage(new Uri(file.FullName));
-                    }
-                }
-            }
+            await GetApiData.LoadCountriesAsync();
+            Countries = await Task.Run(()=> UIData.GetCountriesList()) ;
             this.dataTemplate.ItemsSource = Countries;
         }
     }

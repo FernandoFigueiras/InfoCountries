@@ -2,6 +2,10 @@
 {
     using InfoCountries.Models;
     using System.Net;
+
+    /// <summary>
+    /// Checks if there is Internet Connection
+    /// </summary>
     public class NetworkService
     {
         public Response CheckConnection()

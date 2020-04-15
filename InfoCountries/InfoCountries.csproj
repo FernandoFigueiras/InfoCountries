@@ -85,7 +85,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Data\SetApiData.cs" />
+    <Compile Include="Data\GetApiData.cs" />
+    <Compile Include="Data\UIData.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="NetWorkService.cs" />
     <Compile Include="Services\ApiService.cs" />
