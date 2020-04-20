@@ -2,20 +2,10 @@
 {
     using InfoCountries.Data;
     using Models;
-    using Services;
-    using Svg;
-    using System;
     using System.Collections.Generic;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.IO;
-    using System.Runtime.CompilerServices;
-    using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Media.Imaging;
-    using Image = System.Windows.Controls.Image;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -31,15 +21,40 @@
         public MainWindow()
         {
             InitializeComponent();
-            UISettings();
+            Task.FromResult(UISettings());
+
+            //Task.WaitAll(test);
+            // teste(test);
+            //if (test.IsCompleted)
+            //{
+            //    MessageBox.Show("Test");
+            //}
+            //else
+            //{
+            //    MessageBox.Show("teste1");
+            //}
+
         }
 
-        public async void UISettings()
+        public async Task UISettings()
         {
-            
-            await GetApiData.LoadCountriesAsync();
-            Countries = await Task.Run(()=> UIData.GetCountriesList()) ;
-            this.dataTemplate.ItemsSource = Countries;
+            Countries = await UIData.GetCountriesList(await GetApiData.LoadAPiAsync());
+            ListBoxCountries.ItemsSource = Countries;
+        }
+
+        private void ListBoxCountries_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListBoxCountries.SelectedItem != null)
+            {
+                Country country = (Country)ListBoxCountries.SelectedItem;
+                this.ContentControl.DataContext = country;
+                TextPais.Visibility = Visibility.Visible;
+                TextCapital.Visibility = Visibility.Visible;
+                TextRegion.Visibility = Visibility.Visible;
+                TextSubRegion.Visibility = Visibility.Visible;
+                TextPopulation.Visibility = Visibility.Visible;
+                TextGini.Visibility = Visibility.Visible;
+            }
         }
     }
 }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-
-namespace InfoCountries.Models
+﻿namespace InfoCountries.Models
 {
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Windows.Media.Imaging;
     public class Country
     {
         public string Name { get; set; }
@@ -34,6 +29,6 @@ namespace InfoCountries.Models
         public string Flag { get; set; }
         public List<RegionalBloc> RegionalBlocs { get; set; }
         public string Cioc { get; set; }
-        public BitmapImage Image { get; set; }
+        public BitmapSource Image { get; set; }
     }
 }

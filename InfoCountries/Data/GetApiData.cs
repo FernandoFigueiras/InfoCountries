@@ -5,6 +5,7 @@
     using Svg;
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
@@ -18,40 +19,41 @@
     /// </summary>
     public static class GetApiData
     {
-
         public static List<Country> Countries;
 
         /// <summary>
         /// Check the internet Connection, loads countries and saves flags trow calling methods
         /// </summary>
         /// <returns>Task</returns>
-        public static async Task LoadCountriesAsync()
+        public static async Task<List<Country>> LoadAPiAsync()
         {
             NetworkService networkService = new NetworkService();
             var connection = networkService.CheckConnection();
 
             if (!connection.IsSuccess)
             {
+                //Implement DataBase
                 MessageBox.Show(connection.Message);
-                return;
+                return null;
             }
             else
             {
-                await LoadAPICountriesAsync();
-                await SaveImagesFrompApiAsync();
+               Countries =  await LoadCountriesFromAPIAsync();
+                return Countries;
             }
-
+            //create else if database is not filled
         }
 
         /// <summary>
         /// Gets the list of countries from API
         /// </summary>
         /// <returns>Task</returns>
-        public static async Task<List<Country>> LoadAPICountriesAsync()
+        public static async Task<List<Country>> LoadCountriesFromAPIAsync()
         {
             ApiService apiService = new ApiService();
             var response = await apiService.GetCountriesAsync("http://restcountries.eu", "/rest/v2/all");
             Countries = (List<Country>)response.Result;
+            await SaveImagesFrompApiAsync();
             return Countries;
         }
 
@@ -119,11 +121,11 @@
                         FileInfo datFile = new FileInfo(file);
                         try
                         {
-                            var svgDocument = SvgDocument.Open(datFile.FullName);
-                            using (var bitmap = svgDocument.Draw(50, 50))
+                            SvgDocument svgDocument = SvgDocument.Open(datFile.FullName);
+
+                            using (Bitmap bitmap = svgDocument.Draw(100, 100))
                             {
                                 bitmap.Save($"{path}{Path.GetFileNameWithoutExtension(file)}.{ImageFormat.Jpeg}");
-
                             }
                         }
                         catch

@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InfoCountries.Services
+﻿namespace InfoCountries.Services
 {
-    class MessageService
+    using System.Windows;
+
+    /// <summary>
+    /// Class to manage message to the user
+    /// </summary>
+    public class MessageService
     {
+        public void ShowMessage(string title, string message)
+        {
+            MessageBox.Show(title, message);
+        }
+
     }
 }
