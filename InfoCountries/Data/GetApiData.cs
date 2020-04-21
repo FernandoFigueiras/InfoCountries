@@ -12,6 +12,7 @@
     using System.Net;
     using System.Runtime.InteropServices.WindowsRuntime;
     using System.Threading.Tasks;
+    using System.Web.Caching;
     using System.Windows;
 
     /// <summary>

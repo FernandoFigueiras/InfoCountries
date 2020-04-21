@@ -1,7 +1,9 @@
 ﻿namespace InfoCountries
 {
     using InfoCountries.Data;
+    using InfoCountries.Services;
     using Models;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Windows;
@@ -16,13 +18,13 @@
         private List<Country> Countries;
 
         #endregion
-
+        Progress<ProgressReportService> progress = new Progress<ProgressReportService>();
 
         public MainWindow()
         {
             InitializeComponent();
             Task.FromResult(UISettings());
-
+            
             //Task.WaitAll(test);
             // teste(test);
             //if (test.IsCompleted)
@@ -38,8 +40,18 @@
 
         public async Task UISettings()
         {
-            Countries = await UIData.GetCountriesList(await GetApiData.LoadAPiAsync());
+            Loading.Visibility = Visibility.Visible;
+            ProgressReportBar.Visibility = Visibility.Visible;
+            progress.ProgressChanged += ReportProgress;
+            Countries = await UIData.GetCountriesList(await GetApiData.LoadAPiAsync(), progress);
             ListBoxCountries.ItemsSource = Countries;
+            ProgressReportBar.Visibility = Visibility.Collapsed;
+            Loading.Visibility = Visibility.Collapsed;
+        }
+
+        private void ReportProgress(object sender, ProgressReportService e)
+        {
+            ProgressReportBar.Value = e.PercComplete;
         }
 
         private void ListBoxCountries_SelectionChanged(object sender, SelectionChangedEventArgs e)

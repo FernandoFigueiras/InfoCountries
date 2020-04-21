@@ -1,4 +1,5 @@
 ﻿using InfoCountries.Models;
+using InfoCountries.Services;
 using Svg;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -23,27 +25,37 @@ namespace InfoCountries.Data
         /// Sets the list of countries to be displayed in the UI
         /// </summary>
         /// <returns></returns>
-        public static async Task< List<Country>> GetCountriesList(List<Country> Countries)
+        public static async Task< List<Country>> GetCountriesList(List<Country> Countries, IProgress<ProgressReportService> progress)
         {
             string PathImage = Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)}\Images\FlagImages");
             DirectoryInfo dir = new DirectoryInfo(PathImage);
             var files = dir.GetFiles();
+            ProgressReportService report = new ProgressReportService();
 
+            
 
             if (Countries != null)
             {
-                foreach (Country country in Countries)
+
+                await Task.Run(() =>
                 {
-                    foreach (var file in files)
+                    Parallel.ForEach<Country>(Countries, (country) =>
                     {
-                        if (file.Name.Contains(country.Name))
+                        foreach (var file in files)
                         {
-                            country.Image = new BitmapImage(new Uri(file.FullName));
-                            country.Image.Freeze();
-                            break;
+                            if (file.Name.Contains(country.Name))
+                            {
+                                country.Image = new BitmapImage(new Uri(file.FullName));
+                                country.Image.Freeze();
+                                break;
+                            }
                         }
-                    }
-                }
+                        report.ApiLoaded = Countries;
+                        report.PercComplete = (Countries.Count * 100) / Countries.Count;
+                        progress.Report(report);
+
+                    });
+                });
             }
             return Countries;
         }

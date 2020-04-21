@@ -92,6 +92,7 @@
     <Compile Include="Services\ApiService.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Services\NetworkService.cs" />
+    <Compile Include="Services\ProgressReportService.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
