@@ -32,7 +32,7 @@
             </StackPanel>
             
             
-            <!-- Search -->
+            <!-- Search label -->
             <StackPanel Margin="20 20 0 20" Grid.Column="0" Grid.Row="1">
                 <Grid>
 
@@ -44,8 +44,11 @@
             <!-- Textbox search -->
             <StackPanel  Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
                 <Grid>
-                    <TextBox/>
+                    <TextBox x:Name="TextBoxSearch" TextChanged="TextBoxSearch_TextChanged"/>
                 </Grid>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Grid.Row="1">
+                <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10 24 0 0" Click="DeleteButton_Click"/>
             </StackPanel>
 
             <!-- ListBox Countries -->
@@ -77,7 +80,7 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Image Source="{Binding Image}"  Grid.Row="0" Height="100" Width="100"/>
+                        <Image Source="{Binding Image}"  Grid.Row="0" Height="100" Width="100" Margin="0 20 0 0"/>
                         <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" Grid.Column="0" 
                                     Grid.Row="1"  HorizontalAlignment="Center">

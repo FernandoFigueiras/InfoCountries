@@ -5,6 +5,7 @@
     using Models;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
@@ -24,7 +25,7 @@
         {
             InitializeComponent();
             Task.FromResult(UISettings());
-            
+
             //Task.WaitAll(test);
             // teste(test);
             //if (test.IsCompleted)
@@ -66,6 +67,33 @@
                 TextSubRegion.Visibility = Visibility.Visible;
                 TextPopulation.Visibility = Visibility.Visible;
                 TextGini.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBoxSearch.Text))
+            {
+                List<Country> SearchCountries = new List<Country>();
+                foreach (Char item in TextBoxSearch.Text)
+                {
+                    SearchCountries = Countries.Where(n => n.Name.ToLower().StartsWith(TextBoxSearch.Text.ToLower())).ToList();
+                }
+
+                ListBoxCountries.ItemsSource = SearchCountries;
+            }
+            else
+            {
+                ListBoxCountries.ItemsSource = Countries;
+            }
+
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextBoxSearch.Text))
+            {
+                TextBoxSearch.Text = string.Empty;
             }
         }
     }
