@@ -22,6 +22,8 @@
     {
         public static List<Country> Countries;
 
+        
+
         /// <summary>
         /// Check the internet Connection, loads countries and saves flags trow calling methods
         /// </summary>
@@ -30,10 +32,10 @@
         {
             NetworkService networkService = new NetworkService();
             var connection = networkService.CheckConnection();
+            
 
             if (!connection.IsSuccess)
             {
-                //Implement DataBase
                 MessageBox.Show(connection.Message);
                 return null;
             }
@@ -42,7 +44,6 @@
                Countries =  await LoadCountriesFromAPIAsync();
                 return Countries;
             }
-            //create else if database is not filled
         }
 
         /// <summary>
@@ -66,6 +67,7 @@
         {
             string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures);
             string ImagePath = Path.Combine(rootPath, @"Images\");
+            
 
             if (!Directory.Exists(ImagePath))
             {

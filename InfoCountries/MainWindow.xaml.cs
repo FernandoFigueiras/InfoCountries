@@ -7,6 +7,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Web.Configuration;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -18,12 +19,17 @@
         #region Atributtes
         private List<Country> Countries;
 
+        public DataBaseServices DataBase { get; set; }
         #endregion
         Progress<ProgressReportService> progress = new Progress<ProgressReportService>();
 
+        private bool load = false;
+
         public MainWindow()
         {
+
             InitializeComponent();
+
             Task.FromResult(UISettings());
 
             //Task.WaitAll(test);
@@ -41,6 +47,7 @@
 
         public async Task UISettings()
         {
+            DataBase = new DataBaseServices();
             Loading.Visibility = Visibility.Visible;
             ProgressReportBar.Visibility = Visibility.Visible;
             progress.ProgressChanged += ReportProgress;
@@ -48,6 +55,28 @@
             ListBoxCountries.ItemsSource = Countries;
             ProgressReportBar.Visibility = Visibility.Collapsed;
             Loading.Visibility = Visibility.Collapsed;
+            await DataManagement(Countries);
+        }
+
+        public async Task DataManagement(List<Country> countries)
+        {
+
+            if (Countries != null)
+            {
+                await Task.Run(() => DataBase.SaveDataBase(Countries));
+            }
+            else
+            {
+                Countries = await UIData.GetCountriesList(DataBase.GetData(progress), progress);
+            }
+            if (Countries.Count==0)
+            {
+                MessageService.ShowMessage("Atenção", "A sua primeira utilização desta aplicação requer uma ligação à internet válida. Por favor tente mais tarde");
+            }
+
+
+
+
         }
 
         private void ReportProgress(object sender, ProgressReportService e)

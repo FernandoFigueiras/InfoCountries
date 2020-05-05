@@ -21,12 +21,15 @@ namespace InfoCountries.Data
 {
     public static class UIData
     {
+
+       
         /// <summary>
         /// Sets the list of countries to be displayed in the UI
         /// </summary>
         /// <returns></returns>
         public static async Task< List<Country>> GetCountriesList(List<Country> Countries, IProgress<ProgressReportService> progress)
         {
+            
             string PathImage = Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)}\Images\FlagImages");
             DirectoryInfo dir = new DirectoryInfo(PathImage);
             var files = dir.GetFiles();
@@ -36,7 +39,7 @@ namespace InfoCountries.Data
 
             if (Countries != null)
             {
-
+               
                 await Task.Run(() =>
                 {
                     Parallel.ForEach<Country>(Countries, (country) =>
@@ -57,7 +60,9 @@ namespace InfoCountries.Data
                     });
                 });
             }
+            
             return Countries;
+            
         }
 
         //public static Country ShowCountryInfo(Country country)

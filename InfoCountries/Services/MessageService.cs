@@ -5,9 +5,9 @@
     /// <summary>
     /// Class to manage message to the user
     /// </summary>
-    public class MessageService
+    public static class MessageService
     {
-        public void ShowMessage(string title, string message)
+        public static void ShowMessage(string title, string message)
         {
             MessageBox.Show(title, message);
         }
