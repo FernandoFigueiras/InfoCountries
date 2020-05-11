@@ -1,6 +1,6 @@
 ﻿namespace InfoCountries.Services
 {
-    using InfoCountries.Models;
+    using Models;
     using System.Net;
 
     /// <summary>
@@ -15,6 +15,8 @@
             try
             {
                 using (client.OpenRead("http://clients3.google.com/generate_204"))
+                //using (client.OpenRead("http://www.google.com"))
+                
                 {
                     return new Response
                     {

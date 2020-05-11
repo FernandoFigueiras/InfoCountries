@@ -86,9 +86,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\GetApiData.cs" />
+    <Compile Include="Data\DataFlow.cs" />
     <Compile Include="Data\UIData.cs" />
+    <Compile Include="Models\Rate.cs" />
     <Compile Include="Models\Response.cs" />
-    <Compile Include="NetWorkService.cs" />
     <Compile Include="Services\ApiService.cs" />
     <Compile Include="Services\DataBaseServices.cs" />
     <Compile Include="Services\MessageService.cs" />

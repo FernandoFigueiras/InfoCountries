@@ -1,23 +1,19 @@
-﻿using InfoCountries.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Markup;
-
-namespace InfoCountries.Services
+﻿namespace InfoCountries.Services
 {
+    using InfoCountries.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.SQLite;
+    using System.IO;
     public class DataBaseServices
     {
         private SQLiteConnection connection;
 
         private SQLiteCommand command;
 
+        /// <summary>
+        /// Contructor to set de database connection and contruction of tables
+        /// </summary>
         public DataBaseServices()
         {
             string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -46,24 +42,32 @@ namespace InfoCountries.Services
 
                 command.ExecuteNonQuery();
 
-               
+
             }
             catch (Exception e)
             {
 
-                MessageService.ShowMessage("Erro",e.Message);
+                MessageService.ShowMessage("Erro", e.Message);
             }
         }
 
+
+        /// <summary>
+        /// Method used to save data to database from loaded API
+        /// </summary>
+        /// <param name="Countries"></param>
         public void SaveDataBase(List<Country> Countries)
         {
             try
             {
-                connection.Open();
+                string sqlCommand = "delete from countries";
+                command = new SQLiteCommand(sqlCommand, connection);
+                command.ExecuteNonQuery();
+
                 foreach (var Country in Countries)
                 {
 
-                    if (Country.Gini!=null)
+                    if (Country.Gini != null)
                     {
                         string sql = string.Format($"insert into countries values ('{Country.Name.Replace("'", " ")}', '{Country.Capital.Replace("'", " ")}', '{Country.Region}', '{Country.Subregion}', {Country.Population}, {Country.Gini});");
                         command = new SQLiteCommand(sql, connection);
@@ -73,11 +77,11 @@ namespace InfoCountries.Services
                         string sql = string.Format($"insert into countries values ('{Country.Name.Replace("'", " ")}','{Country.Capital.Replace("'", " ")}', '{Country.Region}', '{Country.Subregion}', {Country.Population}, 0);");
                         command = new SQLiteCommand(sql, connection);
                     }
-                    
+
 
 
                     command.ExecuteNonQuery();
-                    
+
                 }
                 connection.Close();
             }
@@ -86,23 +90,24 @@ namespace InfoCountries.Services
 
                 MessageService.ShowMessage("Erro", e.Message);
             }
-            
+
         }
 
-
-        public List<Country> GetData(IProgress<ProgressReportService> progress)
+        /// <summary>
+        /// If no internet connection this method returns data from database
+        /// </summary>
+        /// <returns></returns>
+        public List<Country> GetDataFromDataBase()
         {
             List<Country> Countries = new List<Country>();
-            ProgressReportService report = new ProgressReportService();
 
             try
             {
-                connection.Open();
                 string sql = "Select Name, Capital, Region, Subregion, Population, Gini from countries;";
 
                 command = new SQLiteCommand(sql, connection);
 
-                SQLiteDataReader reader =  command.ExecuteReader();
+                SQLiteDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -116,9 +121,6 @@ namespace InfoCountries.Services
                         Gini = Convert.ToDouble(reader["Gini"])
 
                     }); ; ;
-                    report.ApiLoaded = Countries;
-                    report.PercComplete = (Countries.Count * 100) / Countries.Count;
-                    progress.Report(report);
                 }
                 connection.Close();
                 return Countries;
@@ -128,7 +130,7 @@ namespace InfoCountries.Services
 
                 MessageService.ShowMessage("Erro", e.Message);
             }
-            return null;
+            return Countries;
         }
     }
 }

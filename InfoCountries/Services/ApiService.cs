@@ -11,7 +11,7 @@
 	{
 
 		/// <summary>
-		/// Gets data from API.
+		/// Gets Countries data from API.
 		/// </summary>
 		/// <param name="baseUrl"></param>
 		/// <param name="controller"></param>
@@ -53,5 +53,47 @@
 			}
 		}
 
+		/// <summary>
+		/// This methos is used to get rates from API
+		/// </summary>
+		/// <param name="baseUrl"></param>
+		/// <param name="controller"></param>
+		/// <returns>list of rates</returns>
+		public async Task<Response> GetRatesAsync(string baseUrl, string controller)
+        {
+            try
+            {
+				var client = new HttpClient();
+
+				client.BaseAddress = new Uri(baseUrl);
+
+				var status = await client.GetAsync(controller);
+
+				var result = await status.Content.ReadAsStringAsync();
+
+                if (!status.IsSuccessStatusCode)
+                {
+					return new Response
+					{
+						IsSuccess = false,
+						Message = result,
+					};
+                }
+				var rates = JsonConvert.DeserializeObject<List<Rate>>(result);
+				return new Response
+				{
+					IsSuccess = true,
+					Result = rates,
+				};
+            }
+            catch (Exception e)
+            {
+				return new Response
+				{
+					IsSuccess = false,
+					Message = e.Message,
+				};
+            }
+        }
 	}
 }

@@ -1,13 +1,13 @@
 ﻿namespace InfoCountries
 {
     using InfoCountries.Data;
+    using InfoCountries.Models;
     using InfoCountries.Services;
-    using Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web.Configuration;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -16,76 +16,58 @@
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region Atributtes
         private List<Country> Countries;
+        private List<Rate> Rates;
 
-        public DataBaseServices DataBase { get; set; }
-        #endregion
-        Progress<ProgressReportService> progress = new Progress<ProgressReportService>();
-
-        private bool load = false;
-
+        private Progress<ProgressReportService> progress;
         public MainWindow()
         {
-
+            
             InitializeComponent();
-
-            Task.FromResult(UISettings());
-
-            //Task.WaitAll(test);
-            // teste(test);
-            //if (test.IsCompleted)
-            //{
-            //    MessageBox.Show("Test");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("teste1");
-            //}
-
+            progress = new Progress<ProgressReportService>();
+            load();
         }
 
+        private void load()
+        {
+            Task.FromResult(UISettings());
+
+        }
+        /// <summary>
+        /// Runs all the necessary methods to get info To main window
+        /// </summary>
+        /// <returns></returns>
         public async Task UISettings()
         {
-            DataBase = new DataBaseServices();
+            border.Visibility = Visibility.Hidden;
             Loading.Visibility = Visibility.Visible;
             ProgressReportBar.Visibility = Visibility.Visible;
             progress.ProgressChanged += ReportProgress;
-            Countries = await UIData.GetCountriesList(await GetApiData.LoadAPiAsync(), progress);
+            Countries = await UIData.GetCountriesList(progress);
             ListBoxCountries.ItemsSource = Countries;
             ProgressReportBar.Visibility = Visibility.Collapsed;
             Loading.Visibility = Visibility.Collapsed;
-            await DataManagement(Countries);
+            SaveDAta();
         }
 
-        public async Task DataManagement(List<Country> countries)
+        private void SaveDAta()
         {
-
-            if (Countries != null)
-            {
-                await Task.Run(() => DataBase.SaveDataBase(Countries));
-            }
-            else
-            {
-                Countries = await UIData.GetCountriesList(DataBase.GetData(progress), progress);
-            }
-            if (Countries.Count==0)
-            {
-                MessageService.ShowMessage("Atenção", "A sua primeira utilização desta aplicação requer uma ligação à internet válida. Por favor tente mais tarde");
-            }
-
-
-
-
+            DataFlow dataFlow = new DataFlow();
+            Task.Run(() => dataFlow.SaveData(Countries));
         }
+        
+
 
         private void ReportProgress(object sender, ProgressReportService e)
         {
             ProgressReportBar.Value = e.PercComplete;
         }
 
+
         private void ListBoxCountries_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            cb_countryRate.ItemsSource = null;
+            cb_rates.ItemsSource = null;
             if (ListBoxCountries.SelectedItem != null)
             {
                 Country country = (Country)ListBoxCountries.SelectedItem;
@@ -96,8 +78,41 @@
                 TextSubRegion.Visibility = Visibility.Visible;
                 TextPopulation.Visibility = Visibility.Visible;
                 TextGini.Visibility = Visibility.Visible;
+                border.Visibility = Visibility.Visible;
+                List<Rate> CountryRate = new List<Rate>();
+                CountryRate = Task.Run(()=> UIData.ShowCountryRates(country)).Result;
+                List<Rate> allRates = new List<Rate>();
+                allRates = Task.Run(() => UIData.ShowAllCoutryRates(country, CountryRate)).Result;
+                if (CountryRate.Count==0)
+                {
+                    Rate empty = new Rate();
+                    empty.Name = "Informação indísponível";
+                    CountryRate.Add(empty);
+                    cb_countryRate.ItemsSource = CountryRate;
+                    allRates.Clear();
+                }
+                else
+                {
+                    cb_countryRate.ItemsSource = CountryRate;
+                }
+             
+                if (allRates.Count==0)
+                {
+                    Rate empty = new Rate();
+                    empty.Name = "Informação indísponível";
+                    allRates.Add(empty);
+                    cb_rates.ItemsSource = allRates;
+                }
+                else
+                {
+                    
+                    cb_rates.ItemsSource = allRates;
+                }
+                
+
             }
         }
+
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -124,6 +139,35 @@
             {
                 TextBoxSearch.Text = string.Empty;
             }
+        }
+
+        private void btn_CalcRate_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (cb_countryRate!= null && cb_rates!=null && !string.IsNullOrWhiteSpace(tb_rate.Text))
+            {
+                Rate origin = (Rate)cb_countryRate.SelectedItem;
+                Rate destination = (Rate)cb_rates.SelectedItem;
+                string input = tb_rate.Text;
+                if (Regex.IsMatch(input, @"^-?[0-9][0-9,\.]+$"))
+                {
+                    lbl_rate.Content = decimal.Round(Convert.ToDecimal(UIData.CalculateRate(origin, destination, Convert.ToDecimal(input))), 2);
+                    lbl_origin.Content = tb_rate.Text + " " + origin.Name;
+                    lbl_destination.Content = destination.Name;
+                }
+            }
+            tb_rate.Text = string.Empty;
+        }
+
+        private void btn_change_coutryRate_Click(object sender, RoutedEventArgs e)
+        {
+            var originRate = cb_countryRate.ItemsSource;
+            var destinationRate = cb_rates.ItemsSource;
+            var change = originRate;
+            originRate = destinationRate;
+            destinationRate = change;
+            cb_countryRate.ItemsSource = originRate;
+            cb_rates.ItemsSource = destinationRate;
         }
     }
 }

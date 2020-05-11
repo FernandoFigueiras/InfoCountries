@@ -22,29 +22,7 @@
     {
         public static List<Country> Countries;
 
-        
-
-        /// <summary>
-        /// Check the internet Connection, loads countries and saves flags trow calling methods
-        /// </summary>
-        /// <returns>Task</returns>
-        public static async Task<List<Country>> LoadAPiAsync()
-        {
-            NetworkService networkService = new NetworkService();
-            var connection = networkService.CheckConnection();
-            
-
-            if (!connection.IsSuccess)
-            {
-                MessageBox.Show(connection.Message);
-                return null;
-            }
-            else
-            {
-               Countries =  await LoadCountriesFromAPIAsync();
-                return Countries;
-            }
-        }
+        public static List<Rate> Rates;
 
         /// <summary>
         /// Gets the list of countries from API
@@ -58,6 +36,19 @@
             await SaveImagesFrompApiAsync();
             return Countries;
         }
+
+        /// <summary>
+        /// Gets the list of rates from API
+        /// </summary>
+        /// <returns>list of Rate</returns>
+        public static async Task<List<Rate>> LoadRatesFromAPIAsync()
+        {
+            ApiService apiService = new ApiService();
+            var response = await apiService.GetRatesAsync("https://cambiosrafa.azurewebsites.net", "/api/rates");
+            Rates = (List<Rate>)response.Result;
+            return Rates;
+        }
+
 
         /// <summary>
         /// Gets flag images from API and stores as SVG in directory
@@ -94,7 +85,6 @@
                         {
 
                         }
-
                     });
                 });
                 await SaveConvertedflagImagesAsync();
