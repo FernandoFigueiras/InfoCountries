@@ -16,7 +16,7 @@
         /// </summary>
         public DataBaseServices()
         {
-            string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string dataBasePath = Path.Combine(rootPath, @"Data\");
 
             if (!Directory.Exists(dataBasePath))
@@ -26,22 +26,34 @@
 
             string dataPath = dataBasePath + "Countries.sqlite";
 
+
+
+
             try
             {
                 connection = new SQLiteConnection("Data Source=" + dataPath);
                 connection.Open();
 
-                string sqlCommand = "create table if not exists countries (Name nvarchar(250)," +
+                string sqlCommand = "create table if not exists Countries (Name nvarchar(250)," +
                     "Capital nvarchar(30), " +
                     "Region nvarchar(30)," +
                     "Subregion nvarchar(30), " +
                     "Population int," +
                     "Gini decimal)";
 
+
                 command = new SQLiteCommand(sqlCommand, connection);
-
                 command.ExecuteNonQuery();
+                connection.Close();
 
+
+                string dataPath2 = dataBasePath + "Rates.sqlite";
+                connection = new SQLiteConnection("Data Source=" + dataPath2);
+                connection.Open();
+
+                string sqlCommand2 = "create table if not exists Rates(RateId int primary key, Code varchar(3), TaxeRate real, nome varchar(150))";
+                command = new SQLiteCommand(sqlCommand2, connection);
+                command.ExecuteNonQuery();
 
             }
             catch (Exception e)
@@ -60,7 +72,7 @@
         {
             try
             {
-                string sqlCommand = "delete from countries";
+                string sqlCommand = "delete from Countries";
                 command = new SQLiteCommand(sqlCommand, connection);
                 command.ExecuteNonQuery();
 
@@ -131,6 +143,30 @@
                 MessageService.ShowMessage("Erro", e.Message);
             }
             return Countries;
+        }
+
+        public void SaveCurrencyData(List<Rate> rates)
+        {
+            try
+            {
+                string sqlCommand = "delete from rates";
+                command = new SQLiteCommand(sqlCommand, connection);
+                command.ExecuteNonQuery();
+
+                foreach (var rate in rates)
+                {
+                    string sql = string.Format($"insert into rates values ({rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name}';");
+                    command = new SQLiteCommand(sql, connection);
+                    command.ExecuteNonQuery();
+
+                }
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                MessageService.ShowMessage("Erro", e.Message);
+            }
+
         }
     }
 }

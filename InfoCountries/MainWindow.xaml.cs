@@ -45,15 +45,17 @@
             progress.ProgressChanged += ReportProgress;
             Countries = await UIData.GetCountriesList(progress);
             ListBoxCountries.ItemsSource = Countries;
+            Rates = await UIData.GetRatesAsync();
             ProgressReportBar.Visibility = Visibility.Collapsed;
             Loading.Visibility = Visibility.Collapsed;
-            SaveDAta();
+            SaveData();
+
         }
 
-        private void SaveDAta()
+        private void SaveData()
         {
             DataFlow dataFlow = new DataFlow();
-            Task.Run(() => dataFlow.SaveData(Countries));
+            Task.Run(() => dataFlow.SaveData(Countries, Rates));
         }
         
 
@@ -80,9 +82,9 @@
                 TextGini.Visibility = Visibility.Visible;
                 border.Visibility = Visibility.Visible;
                 List<Rate> CountryRate = new List<Rate>();
-                CountryRate = Task.Run(()=> UIData.ShowCountryRates(country)).Result;
+                CountryRate = Task.Run(()=> UIData.ShowCountryRates(country, Rates)).Result;
                 List<Rate> allRates = new List<Rate>();
-                allRates = Task.Run(() => UIData.ShowAllCoutryRates(country, CountryRate)).Result;
+                allRates = Task.Run(() => UIData.ShowAllCoutryRates(country, CountryRate, Rates)).Result;
                 if (CountryRate.Count==0)
                 {
                     Rate empty = new Rate();

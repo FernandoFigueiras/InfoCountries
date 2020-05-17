@@ -30,8 +30,7 @@
                 return false;
             }
         }
-
-
+        
         /// <summary>
         /// This method searches for an internet connection. If connection is valid gets data from API, if not gets data from Databse
         /// </summary>
@@ -65,12 +64,13 @@
         /// </summary>
         /// <param name="Countries"></param>
         /// <returns>Task</returns>
-        public async Task SaveData(List<Country> Countries)
+        public async Task SaveData(List<Country> Countries, List<Rate> Rates)
         {
             if (SetConnectionStatus())
             {
                 dataBaseServices = new DataBaseServices();
                 await Task.Run(() => dataBaseServices.SaveDataBase(Countries));
+                await Task.Run(() => dataBaseServices.SaveCurrencyData(Rates));
             }
         }
 

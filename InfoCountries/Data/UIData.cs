@@ -58,7 +58,7 @@
         /// This method returns Rates from API to be presented in UI
         /// </summary>
         /// <returns> List of Rates</returns>
-        public static async Task<List<Rate>> ShowRates()
+        public static async Task<List<Rate>> GetRatesAsync()
         {
             DataFlow RatesData = new DataFlow();
             List<Rate> Rates = await RatesData.GetRatesAPIDataAsync();
@@ -72,17 +72,15 @@
         /// </summary>
         /// <param name="country"></param>
         /// <returns>List of string currency name</returns>
-        public static async Task<List<Rate>> ShowCountryRates(Country country)
+        public static List<Rate> ShowCountryRates(Country country, List<Rate> rates)
         {
-            List<Rate> Rates = new List<Rate>();
-            Rates = await ShowRates();
             List<Rate> ratesListCountry = new List<Rate>();
 
-            if (Rates != null)
+            if (rates != null)
             {
                 foreach (var currency in country.Currencies)
                 {
-                    foreach (var Rate in Rates)
+                    foreach (var Rate in rates)
                     {
                         if (currency.Code == Rate.Code)
                         {
@@ -100,19 +98,17 @@
         /// <param name="country"></param>
         /// <param name="OriginRate"></param>
         /// <returns> list of string currency name</returns>
-        public static async Task<List<Rate>> ShowAllCoutryRates(Country country, List<Rate> OriginRate)
+        public static List<Rate> ShowAllCoutryRates(Country country, List<Rate> OriginRate, List<Rate> rates)
         {
-            List<Rate> Rates = new List<Rate>();
-            Rates = await ShowRates();
             List<Rate> AllCountriesRates = new List<Rate>();
             if (OriginRate.Count != 0)//If no information is available for a specific currency
             {
 
-                if (Rates != null)
+                if (rates != null)
                 {
                     foreach (var currency in country.Currencies)
                     {
-                        foreach (var Rate in Rates)
+                        foreach (var Rate in rates)
                         {
                             if (currency.Code != Rate.Code)
                             {
@@ -125,7 +121,13 @@
             return AllCountriesRates;
         }
 
-
+        /// <summary>
+        /// methos used to calculate a specific rate
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="destination"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static decimal CalculateRate(Rate origin, Rate destination, decimal value  )
         {
             decimal calcRate = 0;
