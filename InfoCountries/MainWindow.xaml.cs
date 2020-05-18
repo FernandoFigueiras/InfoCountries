@@ -19,7 +19,9 @@
     {
         private List<Country> Countries;
         private List<Rate> Rates;
-        private List<Comment> CommentsCountry; 
+        private List<Comment> CommentsCountry;
+
+        private int test;
 
         private Progress<ProgressReportService> progress;
         public MainWindow()
