@@ -6,6 +6,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Policy;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Windows;
@@ -18,11 +19,12 @@
     {
         private List<Country> Countries;
         private List<Rate> Rates;
+        private List<Comment> CommentsCountry; 
 
         private Progress<ProgressReportService> progress;
         public MainWindow()
         {
-            
+
             InitializeComponent();
             progress = new Progress<ProgressReportService>();
             load();
@@ -57,7 +59,7 @@
             DataFlow dataFlow = new DataFlow();
             Task.Run(() => dataFlow.SaveData(Countries, Rates));
         }
-        
+
 
 
         private void ReportProgress(object sender, ProgressReportService e)
@@ -82,10 +84,10 @@
                 TextGini.Visibility = Visibility.Visible;
                 border.Visibility = Visibility.Visible;
                 List<Rate> CountryRate = new List<Rate>();
-                CountryRate = Task.Run(()=> UIData.ShowCountryRates(country, Rates)).Result;
+                CountryRate = Task.Run(() => UIData.ShowCountryRates(country, Rates)).Result;
                 List<Rate> allRates = new List<Rate>();
                 allRates = Task.Run(() => UIData.ShowAllCoutryRates(country, CountryRate, Rates)).Result;
-                if (CountryRate.Count==0)
+                if (CountryRate.Count == 0)
                 {
                     Rate empty = new Rate();
                     empty.Name = "Informação indísponível";
@@ -97,8 +99,8 @@
                 {
                     cb_countryRate.ItemsSource = CountryRate;
                 }
-             
-                if (allRates.Count==0)
+
+                if (allRates.Count == 0)
                 {
                     Rate empty = new Rate();
                     empty.Name = "Informação indísponível";
@@ -107,13 +109,21 @@
                 }
                 else
                 {
-                    
+
                     cb_rates.ItemsSource = allRates;
                 }
-                
+                CommentsCountry = Task.Run(() => UIData.GetCommentsData(country)).Result;
 
+
+                textComment.Text = "";
+                foreach (Comment comment in CommentsCountry)
+                {
+                    textComment.Text += comment.Comments + Environment.NewLine;
+                    
+                }
             }
         }
+
 
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
@@ -146,7 +156,7 @@
         private void btn_CalcRate_Click(object sender, RoutedEventArgs e)
         {
 
-            if (cb_countryRate!= null && cb_rates!=null && !string.IsNullOrWhiteSpace(tb_rate.Text))
+            if (cb_countryRate != null && cb_rates != null && !string.IsNullOrWhiteSpace(tb_rate.Text))
             {
                 Rate origin = (Rate)cb_countryRate.SelectedItem;
                 Rate destination = (Rate)cb_rates.SelectedItem;
@@ -170,6 +180,23 @@
             destinationRate = change;
             cb_countryRate.ItemsSource = originRate;
             cb_rates.ItemsSource = destinationRate;
+        }
+
+        private void post_Click(object sender, RoutedEventArgs e)
+        {
+            Country country = (Country)ListBoxCountries.SelectedItem;
+            DataFlow dataFlow = new DataFlow();
+
+            if (!string.IsNullOrWhiteSpace(posttext.Text) && country != null)
+            {
+                Comment comment = new Comment
+                {
+                    Alphacode = country.Alpha2Code,
+                    Comments = posttext.Text,
+                };
+                Task.Run(() => dataFlow.PostCommentsData(country, comment));
+            }
+            return;
         }
     }
 }

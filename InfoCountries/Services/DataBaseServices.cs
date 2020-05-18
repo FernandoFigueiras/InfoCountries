@@ -3,11 +3,13 @@
     using InfoCountries.Models;
     using System;
     using System.Collections.Generic;
+    using System.Data.Common;
     using System.Data.SQLite;
     using System.IO;
     public class DataBaseServices
     {
-        private SQLiteConnection connection;
+        private SQLiteConnection connectionCountries;
+        private SQLiteConnection connectionRates;
 
         private SQLiteCommand command;
 
@@ -16,7 +18,7 @@
         /// </summary>
         public DataBaseServices()
         {
-            string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
             string dataBasePath = Path.Combine(rootPath, @"Data\");
 
             if (!Directory.Exists(dataBasePath))
@@ -31,8 +33,8 @@
 
             try
             {
-                connection = new SQLiteConnection("Data Source=" + dataPath);
-                connection.Open();
+                connectionCountries = new SQLiteConnection("Data Source=" + dataPath);
+                connectionCountries.Open();
 
                 string sqlCommand = "create table if not exists Countries (Name nvarchar(250)," +
                     "Capital nvarchar(30), " +
@@ -42,17 +44,16 @@
                     "Gini decimal)";
 
 
-                command = new SQLiteCommand(sqlCommand, connection);
+                command = new SQLiteCommand(sqlCommand, connectionCountries);
                 command.ExecuteNonQuery();
-                connection.Close();
 
 
                 string dataPath2 = dataBasePath + "Rates.sqlite";
-                connection = new SQLiteConnection("Data Source=" + dataPath2);
-                connection.Open();
+                connectionRates = new SQLiteConnection("Data Source=" + dataPath2);
+                connectionRates.Open();
 
                 string sqlCommand2 = "create table if not exists Rates(RateId int primary key, Code varchar(3), TaxeRate real, nome varchar(150))";
-                command = new SQLiteCommand(sqlCommand2, connection);
+                command = new SQLiteCommand(sqlCommand2, connectionRates);
                 command.ExecuteNonQuery();
 
             }
@@ -68,12 +69,12 @@
         /// Method used to save data to database from loaded API
         /// </summary>
         /// <param name="Countries"></param>
-        public void SaveDataBase(List<Country> Countries)
+        public void SaveCountriesData(List<Country> Countries)
         {
             try
             {
-                string sqlCommand = "delete from Countries";
-                command = new SQLiteCommand(sqlCommand, connection);
+                string sqlCommand = "delete from countries";
+                command = new SQLiteCommand(sqlCommand, connectionCountries);
                 command.ExecuteNonQuery();
 
                 foreach (var Country in Countries)
@@ -82,12 +83,12 @@
                     if (Country.Gini != null)
                     {
                         string sql = string.Format($"insert into countries values ('{Country.Name.Replace("'", " ")}', '{Country.Capital.Replace("'", " ")}', '{Country.Region}', '{Country.Subregion}', {Country.Population}, {Country.Gini});");
-                        command = new SQLiteCommand(sql, connection);
+                        command = new SQLiteCommand(sql, connectionCountries);
                     }
                     else
                     {
                         string sql = string.Format($"insert into countries values ('{Country.Name.Replace("'", " ")}','{Country.Capital.Replace("'", " ")}', '{Country.Region}', '{Country.Subregion}', {Country.Population}, 0);");
-                        command = new SQLiteCommand(sql, connection);
+                        command = new SQLiteCommand(sql, connectionCountries);
                     }
 
 
@@ -95,7 +96,7 @@
                     command.ExecuteNonQuery();
 
                 }
-                connection.Close();
+                connectionCountries.Close();
             }
             catch (Exception e)
             {
@@ -109,7 +110,7 @@
         /// If no internet connection this method returns data from database
         /// </summary>
         /// <returns></returns>
-        public List<Country> GetDataFromDataBase()
+        public List<Country> GetCountriesData()
         {
             List<Country> Countries = new List<Country>();
 
@@ -117,7 +118,7 @@
             {
                 string sql = "Select Name, Capital, Region, Subregion, Population, Gini from countries;";
 
-                command = new SQLiteCommand(sql, connection);
+                command = new SQLiteCommand(sql, connectionCountries);
 
                 SQLiteDataReader reader = command.ExecuteReader();
 
@@ -134,7 +135,7 @@
 
                     }); ; ;
                 }
-                connection.Close();
+                connectionCountries.Close();
                 return Countries;
             }
             catch (Exception e)
@@ -145,28 +146,66 @@
             return Countries;
         }
 
-        public void SaveCurrencyData(List<Rate> rates)
+
+        /// <summary>
+        /// Method used to save rates into dataBase
+        /// </summary>
+        /// <param name="rates"></param>
+        public void SaveRatesData(List<Rate> rates)
         {
             try
             {
                 string sqlCommand = "delete from rates";
-                command = new SQLiteCommand(sqlCommand, connection);
+                command = new SQLiteCommand(sqlCommand, connectionRates);
                 command.ExecuteNonQuery();
 
                 foreach (var rate in rates)
                 {
-                    string sql = string.Format($"insert into rates values ({rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name}';");
-                    command = new SQLiteCommand(sql, connection);
+                    string sql = string.Format($"insert into rates values ({rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name}');");
+                    command = new SQLiteCommand(sql, connectionRates);
                     command.ExecuteNonQuery();
 
                 }
-                connection.Close();
+                connectionRates.Close();
             }
             catch (Exception e)
             {
                 MessageService.ShowMessage("Erro", e.Message);
             }
 
+        }
+
+        public List<Rate> GetRatesData()
+        {
+            List<Rate> Rates = new List<Rate>();
+
+            try
+            {
+                string sql = "Select , RateId, Code, TaxeRate, Name from Rates;";
+
+                command = new SQLiteCommand(sql, connectionRates);
+
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Rates.Add(new Rate
+                    {
+                        RateId = Convert.ToInt32(reader["RateID"]),
+                        Code = reader["Code"].ToString(),
+                        TaxRate = Convert.ToDecimal(reader["TaxRate"]),
+                        Name = reader["Name"].ToString(),
+                    });
+                }
+                connectionCountries.Close();
+                return Rates;
+            }
+            catch (Exception e)
+            {
+
+                MessageService.ShowMessage("Erro", e.Message);
+            }
+            return Rates;
         }
     }
 }

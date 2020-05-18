@@ -21,7 +21,7 @@
         {
             DataFlow data = new DataFlow();
             List<Country> Countries = new List<Country>();
-            Countries = await data.ReturnData();
+            Countries = await data.ReturnCountriesData();
 
             string PathImage = Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)}\Images\FlagImages");
             DirectoryInfo dir = new DirectoryInfo(PathImage);
@@ -64,8 +64,6 @@
             List<Rate> Rates = await RatesData.GetRatesAPIDataAsync();
             return Rates;
         }
-
-
 
         /// <summary>
         /// This method searches for specific Rate of a coutry selected
@@ -138,6 +136,16 @@
             return calcRate;
         }
 
-
+        /// <summary>
+        /// gets a list of Comments to be presented in the UI
+        /// </summary>
+        /// <param name="country"></param>
+        /// <returns></returns>
+        public static async Task<List<Comment>> GetCommentsData(Country country)
+        {
+            DataFlow CommentsData = new DataFlow();
+            List<Comment> Comments = await CommentsData.GetCommentsAPIAsync(country);
+            return Comments;
+        }
     }
 }

@@ -10,10 +10,7 @@
     using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Runtime.InteropServices.WindowsRuntime;
     using System.Threading.Tasks;
-    using System.Web.Caching;
-    using System.Windows;
 
     /// <summary>
     /// This class is used to get and store data from the API
@@ -23,6 +20,8 @@
         public static List<Country> Countries;
 
         public static List<Rate> Rates;
+
+        public static List<Comment> Comments;
 
         /// <summary>
         /// Gets the list of countries from API
@@ -58,7 +57,7 @@
         {
             string rootPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures);
             string ImagePath = Path.Combine(rootPath, @"Images\");
-            
+
 
             if (!Directory.Exists(ImagePath))
             {
@@ -130,6 +129,19 @@
         }
 
 
+        /// <summary>
+        /// Loads all the comments of a specific country
+        /// </summary>
+        /// <param name="country"></param>
+        /// <returns> List of Comments for a country</returns>
+        public static async Task<List<Comment>> LoadApiCommentsAsync(Country country)
+        {
+            ApiService apiService = new ApiService();
+            string controller = "/api/Comments/" + country.Alpha2Code;
+            var response = await apiService.GetCommentsAsync("http://CountriesComments.somee.com", controller);
+            Comments = (List<Comment>)response.Result;
+            return Comments;
+        }
     }
 }
 

@@ -88,6 +88,7 @@
     <Compile Include="Data\GetApiData.cs" />
     <Compile Include="Data\DataFlow.cs" />
     <Compile Include="Data\UIData.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Rate.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Services\ApiService.cs" />

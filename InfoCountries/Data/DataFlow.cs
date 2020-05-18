@@ -4,6 +4,7 @@
     using Services;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using System.Web.Management;
 
     /// <summary>
     /// This classe is used to verify if data comes from API or DataBase. And to store data to Database
@@ -12,6 +13,7 @@
     {
         public List<Country> Countries;
         public List<Rate> Rates;
+        public List<Comment> Comments;
         public DataBaseServices dataBaseServices;
 
         private bool SetConnectionStatus()
@@ -35,7 +37,7 @@
         /// This method searches for an internet connection. If connection is valid gets data from API, if not gets data from Databse
         /// </summary>
         /// <returns>List of Country</returns>
-        public async Task<List<Country>> ReturnData()
+        public async Task<List<Country>> ReturnCountriesData()
         {
             dataBaseServices = new DataBaseServices();
             SetConnectionStatus();
@@ -46,7 +48,7 @@
             }
             else
             {
-                Countries = dataBaseServices.GetDataFromDataBase();
+                Countries = dataBaseServices.GetCountriesData();
             }
 
             if (!SetConnectionStatus())
@@ -69,8 +71,8 @@
             if (SetConnectionStatus())
             {
                 dataBaseServices = new DataBaseServices();
-                await Task.Run(() => dataBaseServices.SaveDataBase(Countries));
-                await Task.Run(() => dataBaseServices.SaveCurrencyData(Rates));
+                await Task.Run(() => dataBaseServices.SaveCountriesData(Countries));
+                await Task.Run(() => dataBaseServices.SaveRatesData(Rates));
             }
         }
 
@@ -84,8 +86,31 @@
             {
                 Rates = await GetApiData.LoadRatesFromAPIAsync();
             }
+            else
+            {
+                Rates = dataBaseServices.GetRatesData();
+            }
+
             return Rates;
         }
 
+        public async Task PostCommentsData(Country country, Comment comment)
+        {
+            ApiService ApiService = new ApiService();
+            if (SetConnectionStatus())
+            {
+                string Controller = "/api/Comments/";
+                await ApiService.PostComments("http://www.CountriesComments.somee.com", Controller + country.Alpha2Code, comment);
+            }
+        }
+
+        public async Task<List<Comment>> GetCommentsAPIAsync(Country country)
+        {
+            if (SetConnectionStatus())
+            {
+                Comments = await GetApiData.LoadApiCommentsAsync(country);
+            }
+            return Comments;
+        }
     }
 }

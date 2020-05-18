@@ -30,8 +30,8 @@
                        Foreground="Blue" HorizontalAlignment="Center" />
                 </Grid>
             </StackPanel>
-            
-            
+
+
             <!-- Search label -->
             <StackPanel Margin="20 20 0 20" Grid.Column="0" Grid.Row="1">
                 <Grid>
@@ -39,8 +39,8 @@
                     <TextBlock Text="Search " FontSize="20" FontWeight="Bold" HorizontalAlignment="Right"/>
                 </Grid>
             </StackPanel>
-            
-            
+
+
             <!-- Textbox search -->
             <StackPanel  Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
                 <Grid>
@@ -67,7 +67,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
+
             <!-- Content Control info Country-->
             <StackPanel Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Background="#eee">
                 <ContentControl Name="ContentControl" >
@@ -83,7 +83,8 @@
                         <Border Name="border" BorderThickness="3" Grid.Row="0" Height="100" Width="100" Margin="0 20 0 0" BorderBrush="#000">
                             <Image Source="{Binding Image}"  />
                         </Border>
-                        
+
+                        <!-- Display info country-->
                         <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" Grid.Column="0" 
                                     Grid.Row="1"  HorizontalAlignment="Center">
@@ -94,7 +95,7 @@
                                     Grid.Row="1"  HorizontalAlignment="Center">
                                 <TextBlock Name="TextCapital" Margin="2" Text="Capital: " Visibility="Collapsed"/>
                                 <TextBlock Margin="2" Text="{Binding Capital}"/>
-                            </StackPanel> 
+                            </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Column="0" 
                                     Grid.Row="1"  HorizontalAlignment="Center">
                                 <TextBlock Name="TextRegion" Margin="2" Text="Região: " Visibility="Collapsed"/>
@@ -109,13 +110,15 @@
                                     Grid.Row="1"  HorizontalAlignment="Center">
                                 <TextBlock Name="TextPopulation" Margin="2" Text="População: " Visibility="Collapsed"/>
                                 <TextBlock Margin="2" Text="{Binding Population}"/>
-                            </StackPanel> 
+                            </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Column="0" 
                                     Grid.Row="1"  HorizontalAlignment="Center">
                                 <TextBlock Name="TextGini" Margin="2" Text="Gini: " Visibility="Collapsed"/>
                                 <TextBlock Margin="2" Text="{Binding Gini}"/>
                             </StackPanel>
                         </StackPanel>
+
+                        <!-- Display info rates-->
                         <StackPanel Grid.Column="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -124,14 +127,15 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Label Content="Insira valor:">
-                                    
+
                                 </Label>
                                 <TextBox Grid.Column="1" x:Name="tb_rate" Grid.ColumnSpan="2" Margin="2 5 2 2" Background="White">
 
                                 </TextBox>
-                               
+
                             </Grid>
 
+                            <!--Combobox rates Country-->
                             <ComboBox Name="cb_countryRate" Margin="0 5 0 0" ItemsSource="{Binding CountryRate}">
                             </ComboBox>
                             <Grid Margin="0 10 0 0">
@@ -140,14 +144,15 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Button x:Name="btn_CalcRate" Grid.Column="0" Margin="0 2 0 0" Click="btn_CalcRate_Click" Height="20" Width="50" Content="calcular">
-                                    
+
                                 </Button>
                                 <Button x:Name="btn_change_coutryRate" Grid.Column="1" Margin="0 2 0 0" Click="btn_change_coutryRate_Click" Height="20" Width="50" Content="Change">
                                 </Button>
                             </Grid>
-                                <ComboBox Name="cb_rates" Margin="0 5 0 0" ItemsSource="{Binding Rates}">
-                                    
-                                </ComboBox>
+                            <!--Combo box all rates-->
+                            <ComboBox Name="cb_rates" Margin="0 5 0 0" ItemsSource="{Binding Rates}">
+
+                            </ComboBox>
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="2">
                             <Grid>
@@ -176,8 +181,26 @@
                     </Grid>
                 </ContentControl>
             </StackPanel>
-            
-            <!-- Progress Bar -->
+            <Border Grid.Column="3" Grid.Row="2" Background="#eee">
+                <ScrollViewer>
+                    <StackPanel x:Name="Comments">
+                        
+                        <TextBox Name="posttext">
+                            
+                        </TextBox>
+
+                        <Button x:Name="post" Height="20" Content="Post" Click="post_Click">
+                            
+                        </Button>
+                        <TextBox Name="textComment" Text="{Binding Comment}" IsReadOnly="True" >
+                            
+                        </TextBox>
+
+                    </StackPanel>
+                </ScrollViewer>
+                
+            </Border>
+                    <!-- Progress Bar -->
             <StackPanel  Grid.Column="1" Grid.Row="3"  Grid.ColumnSpan="2">
                 <TextBlock x:Name="Loading" Text="Loading .... " FontSize="10" Visibility="Hidden" Margin="0 0 0 5" 
                            HorizontalAlignment="Center" Foreground="DarkBlue"/>
@@ -186,7 +209,7 @@
             </StackPanel>
 
 
-            
+
         </Grid>
 
 
