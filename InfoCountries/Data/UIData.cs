@@ -4,6 +4,7 @@
     using Services;
     using System;
     using System.Collections.Generic;
+    using System.Drawing.Text;
     using System.IO;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
@@ -13,6 +14,7 @@
     /// </summary>
     public static class UIData
     {
+        
         /// <summary>
         /// Sets the list of countries to be displayed in the UI
         /// </summary>
@@ -22,6 +24,7 @@
             DataFlow data = new DataFlow();
             List<Country> Countries = new List<Country>();
             Countries = await data.ReturnCountriesData();
+            
 
             string PathImage = Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)}\Images\FlagImages");
             DirectoryInfo dir = new DirectoryInfo(PathImage);
@@ -147,5 +150,7 @@
             List<Comment> Comments = await CommentsData.GetCommentsAPIAsync(country);
             return Comments;
         }
+
+     
     }
 }
