@@ -5,212 +5,372 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InfoCountries"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="900" >
-    <Grid>
-        <StackPanel Orientation="Horizontal" />
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="4*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="12"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="MainWindow" Height="500" Width="900">
+    <Grid Background="#DFE0DB">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
 
 
-            <!-- Title -->
-            <StackPanel Margin="20 20 20 20" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2">
-                <Grid>
-                    <TextBlock Text="Countries" FontSize="20" FontWeight="Bold" 
-                       Foreground="Blue" HorizontalAlignment="Center" />
-                </Grid>
-            </StackPanel>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+
+        </Grid.RowDefinitions>
 
 
-            <!-- Search label -->
-            <StackPanel Margin="20 20 0 20" Grid.Column="0" Grid.Row="1">
-                <Grid>
-
-                    <TextBlock Text="Search " FontSize="20" FontWeight="Bold" HorizontalAlignment="Right"/>
-                </Grid>
-            </StackPanel>
-
-
-            <!-- Textbox search -->
-            <StackPanel  Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
-                <Grid>
-                    <TextBox x:Name="TextBoxSearch" TextChanged="TextBoxSearch_TextChanged"/>
-                </Grid>
-            </StackPanel>
-            <StackPanel Grid.Column="2" Grid.Row="1">
-                <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10 24 0 0" Click="DeleteButton_Click"/>
-            </StackPanel>
-
-            <!-- ListBox Countries -->
-            <ListBox Name="ListBoxCountries" Margin="20 0 10 0"
-                     SelectionChanged="ListBoxCountries_SelectionChanged" Grid.Row="2" Background="#eee">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
-                            <Image Source="{Binding Image}" Height="20" Width="20" Margin="10">
-                            </Image>
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Name}" FontSize="12" ></TextBlock>
-                                <TextBlock Text="{Binding region}" FontSize="12"></TextBlock>
+        <!--Top bar menu-->
+        <materialDesign:ColorZone Grid.Column="0" Grid.RowSpan="2" 
+  Mode="Inverted" Grid.ColumnSpan="9" Foreground="#700005" Background="Transparent" FontSize="12">
+            <DockPanel>
+                <materialDesign:PopupBox
+      DockPanel.Dock="Right"
+      PlacementMode="BottomAndAlignRightEdges">
+                    <ListBox>
+                        <ListBoxItem HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock HorizontalAlignment="Left">Light</TextBlock>
+                                <ToggleButton  Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+                                               ToolTip="MaterialDesignSwitchAccentToggleButton"  IsChecked="True" HorizontalAlignment="Center"/>
+                                <TextBlock HorizontalAlignment="Right">Dark</TextBlock>
                             </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-            <!-- Content Control info Country-->
-            <StackPanel Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Background="#eee">
-                <ContentControl Name="ContentControl" >
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Border Name="border" BorderThickness="3" Grid.Row="0" Height="100" Width="100" Margin="0 20 0 0" BorderBrush="#000">
-                            <Image Source="{Binding Image}"  />
-                        </Border>
-
-                        <!-- Display info country-->
-                        <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" Grid.Column="0" 
-                                    Grid.Row="1"  HorizontalAlignment="Center">
-                                <TextBlock Name="TextPais" Margin="2" Text="Pais: " Visibility="Collapsed"/>
-                                <TextBlock Margin="2" Text="{Binding Name}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Column="0" 
-                                    Grid.Row="1"  HorizontalAlignment="Center">
-                                <TextBlock Name="TextCapital" Margin="2" Text="Capital: " Visibility="Collapsed"/>
-                                <TextBlock Margin="2" Text="{Binding Capital}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Column="0" 
-                                    Grid.Row="1"  HorizontalAlignment="Center">
-                                <TextBlock Name="TextRegion" Margin="2" Text="Região: " Visibility="Collapsed"/>
-                                <TextBlock Margin="2" Text="{Binding Region}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Column="0" 
-                                    Grid.Row="1"  HorizontalAlignment="Center">
-                                <TextBlock Name="TextSubRegion" Margin="2" Text="Sub-Região: " Visibility="Collapsed"/>
-                                <TextBlock Margin="2" Text="{Binding Subregion}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Column="0" 
-                                    Grid.Row="1"  HorizontalAlignment="Center">
-                                <TextBlock Name="TextPopulation" Margin="2" Text="População: " Visibility="Collapsed"/>
-                                <TextBlock Margin="2" Text="{Binding Population}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Column="0" 
-                                    Grid.Row="1"  HorizontalAlignment="Center">
-                                <TextBlock Name="TextGini" Margin="2" Text="Gini: " Visibility="Collapsed"/>
-                                <TextBlock Margin="2" Text="{Binding Gini}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <!-- Display info rates-->
-                        <StackPanel Grid.Column="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Label Content="Insira valor:">
-
-                                </Label>
-                                <TextBox Grid.Column="1" x:Name="tb_rate" Grid.ColumnSpan="2" Margin="2 5 2 2" Background="White">
-
-                                </TextBox>
-
-                            </Grid>
-
-                            <!--Combobox rates Country-->
-                            <ComboBox Name="cb_countryRate" Margin="0 5 0 0" ItemsSource="{Binding CountryRate}">
-                            </ComboBox>
-                            <Grid Margin="0 10 0 0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Button x:Name="btn_CalcRate" Grid.Column="0" Margin="0 2 0 0" Click="btn_CalcRate_Click" Height="20" Width="50" Content="calcular">
-
-                                </Button>
-                                <Button x:Name="btn_change_coutryRate" Grid.Column="1" Margin="0 2 0 0" Click="btn_change_coutryRate_Click" Height="20" Width="50" Content="Change">
-                                </Button>
-                            </Grid>
-                            <!--Combo box all rates-->
-                            <ComboBox Name="cb_rates" Margin="0 5 0 0" ItemsSource="{Binding Rates}">
-
-                            </ComboBox>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2" Grid.Row="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Label Grid.Column="0" Grid.Row="1" Content="Moeda origem" Grid.ColumnSpan="2" />
-                                <Label Grid.Column="0" Grid.Row="2" Content="Moeda destino" Grid.ColumnSpan="2" />
-                                <Label Grid.Column="0" Grid.Row="3" Content="Cambio" Grid.ColumnSpan="2" />
-                                <Label Name="lbl_origin" Grid.Column="2" Grid.Row="1"  Grid.ColumnSpan="2" />
-                                <Label Name="lbl_destination" Grid.Column="2" Grid.Row="2"  Grid.ColumnSpan="2" />
-                                <Label Name="lbl_rate" Grid.Column="2" Grid.Row="3"  Grid.ColumnSpan="2" />
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Button Content="About" HorizontalContentAlignment="Center" Width="120" >
+                            </Button>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Button Content="Exit" HorizontalContentAlignment="Center" Width="120" >
+                            </Button>
+                        </ListBoxItem>
+                    </ListBox>
+                </materialDesign:PopupBox>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Margin="16 0 0 0">
+                    </TextBlock>
+                </StackPanel>
+            </DockPanel>
+        </materialDesign:ColorZone>
 
 
-                            </Grid>
-                        </StackPanel>
-                    </Grid>
-                </ContentControl>
-            </StackPanel>
-            <Border Grid.Column="3" Grid.Row="2" Background="#eee">
-                <ScrollViewer>
-                    <StackPanel x:Name="Comments">
-                        
-                        <TextBox Name="posttext">
-                            
-                        </TextBox>
-
-                        <Button x:Name="post" Height="20" Content="Post" Click="post_Click">
-                            
-                        </Button>
-                        <TextBox Name="textComment" Text="{Binding Comment}" IsReadOnly="True" >
-                            
-                        </TextBox>
-
-                    </StackPanel>
-                </ScrollViewer>
-                
+        <!--Seach-->
+        <Grid Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Margin="60 10 20 10" >
+            <Border  BorderBrush="#CDCDCF" CornerRadius="10" BorderThickness="4" >
+                <TextBox x:Name="tb_seach" Background="#CAC3C1" materialDesign:HintAssist.Hint="Search" 
+                         materialDesign:TextFieldAssist.UnderlineBrush="#725753"
+                         materialDesign:TextFieldAssist.HasClearButton="True" TextChanged="tb_seach_TextChanged">
+                </TextBox>
             </Border>
-                    <!-- Progress Bar -->
-            <StackPanel  Grid.Column="1" Grid.Row="3"  Grid.ColumnSpan="2">
-                <TextBlock x:Name="Loading" Text="Loading .... " FontSize="10" Visibility="Hidden" Margin="0 0 0 5" 
-                           HorizontalAlignment="Center" Foreground="DarkBlue"/>
-                <ProgressBar x:Name="ProgressReportBar"  Margin="0 5 0 0" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Visibility="Hidden">
-                </ProgressBar>
-            </StackPanel>
-
-
 
         </Grid>
+
+        <!--Menu region buttons-->
+        <Button x:Name="btn_africa" Grid.Column="3" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises de Africa" 
+                Margin="0 0 15 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+            Africa
+        </Button>
+        <Button x:Name="btn_america" Grid.Column="4" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da America" 
+                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+            America
+        </Button>
+        <Button x:Name="btn_asia" Grid.Column="5" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da Asia" 
+                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+            Asia
+        </Button>
+        <Button Name="btn_europa" Grid.Column="6" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da Europa" 
+                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+            Europa
+        </Button>
+        <Button Name="btn_oceania" Grid.Column="7" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da Oceania" 
+                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+            Oceania
+        </Button>
+
+        <!--Side menu buttons-->
+        <StackPanel Grid.Row="3" Grid.RowSpan="9" Grid.ColumnSpan="2"
+  Orientation="Horizontal" >
+            <Border Width="1" VerticalAlignment="Stretch" SnapsToDevicePixels="True" />
+            <Border Background="{DynamicResource MaterialDesignDivider}" Width="1" VerticalAlignment="Stretch"
+    SnapsToDevicePixels="True" />
+            <Expander  ExpandDirection="Right" Background="#E7E6DA">
+                <Expander.Header>
+                    <TextBlock Margin="0 30 0 0" Text="CLICK TO OPEN"  RenderTransformOrigin=".5,.5" Foreground="#6D4825">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform  Angle="90" />
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <StackPanel Orientation="Vertical" Margin="8,24,10,24">
+                    <Button x:Name="btn_info" Grid.Row="3"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
+                ToolTip="Clique para saber mais" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10">
+                        Info
+                    </Button>
+                    <Button Name="btn_rate" Grid.Row="5"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
+                ToolTip="Clique " Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10">
+                        Conversor
+                    </Button>
+                    <Button x:Name="btn_post" Grid.Row="7"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
+                ToolTip="Clique para saber mais" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10">
+                        Post
+                    </Button>
+                    <!--<Button Grid.Row="9"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
+                ToolTip="Clique para saber mais" Margin="0 0 0 25" FontFamily="Century Gothic" FontSize="10">
+                        Info
+                    </Button>-->
+                </StackPanel>
+            </Expander>
+            <Border  Background="{DynamicResource MaterialDesignDivider}" Width="1" VerticalAlignment="Stretch"
+    SnapsToDevicePixels="True" />
+        </StackPanel>
+
+
+        <!--GroupBox info start-->
+        <GroupBox x:Name="gb_info_start" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
+  Style="{DynamicResource MaterialDesignCardGroupBox}"
+  Margin="60 20 20 20"
+  materialDesign:ColorZoneAssist.Mode="Custom"
+  materialDesign:ColorZoneAssist.Background="#eee"
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+            <!--<GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+          Margin="8,0,0,0"
+          VerticalAlignment="Center"
+          Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+          Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>-->
+            <ScrollViewer Background="#C6C6C6">
+                <ItemsControl x:Name="total_countries_info" ItemsSource="{Binding}" HorizontalAlignment="Center">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btn_image_from_all" Click="btn_image_from_all_Click" BorderBrush="#7B050A"
+                                        BorderThickness="2" Width="150" Height="150" Margin="20" Background="Transparent"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="{Binding Name}">
+                                    <Image  Source="{Binding Image}"/>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
+        </GroupBox>
+
+        <!--GroupBox country details-->
+        <GroupBox x:Name="gb_country_details" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
+  Style="{DynamicResource MaterialDesignCardGroupBox}"
+  Margin="60 20 20 20"
+  materialDesign:ColorZoneAssist.Mode="Custom"
+  materialDesign:ColorZoneAssist.Background="#eee"
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btn_backCDetail" Background="#eee" BorderBrush="Transparent" 
+                                Width="40" Height="40" Click="btn_backCDetail_Click">
+                            <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+
+            <ItemsControl x:Name="country_details" ItemsSource="{Binding}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <Border Width="150" Height="150" BorderThickness="1" 
+                                            BorderBrush="#696A6C" CornerRadius="3" 
+                                        HorizontalAlignment="Center" Margin="20">
+                                    <Image Source="{Binding Image}" Grid.RowSpan="2"/>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <StackPanel Orientation="Horizontal " Margin="20 30 20 0">
+                                    <TextBlock Text="Nome" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="{Binding Name}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
+                                    <TextBlock Text="Capital " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="{Binding Capital}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
+                                    <TextBlock Text="Regiao " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="{Binding Region}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
+                                    <TextBlock Text="Sub-Regiao " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="{Binding Subregion}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
+                                    <TextBlock Text="Populacao " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="{Binding Population}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
+                                    <TextBlock Text="Taxa de indice Gini " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="{Binding Gini}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
+                                </StackPanel>
+
+                            </StackPanel>
+
+                        </Grid>
+
+
+
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+
+
+        </GroupBox>
+
+
+        <!--GroupBox info 2-->
+        <GroupBox x:Name="gb_info_country" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
+
+  Style="{DynamicResource MaterialDesignCardGroupBox}"
+  Margin="60 20 20 20"
+  materialDesign:ColorZoneAssist.Mode="Custom"
+  materialDesign:ColorZoneAssist.Background="#eee"
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btn_infoBack" Background="#eee" BorderBrush="Transparent" 
+                                Width="40" Height="40" Click="btn_infoBack_Click">
+                            <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <WrapPanel>
+                <Image
+    Source="{Binding}"
+    VerticalAlignment="Center"
+    HorizontalAlignment="Center" />
+            </WrapPanel>
+        </GroupBox>
+
+        <!--GroupBox info 3-->
+        <GroupBox x:Name="gb_rate" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
+  Style="{DynamicResource MaterialDesignCardGroupBox}"
+  Margin="60 20 20 20"
+  materialDesign:ColorZoneAssist.Mode="Custom"
+  materialDesign:ColorZoneAssist.Background="#eee"
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btn_rateBack" Background="#eee" BorderBrush="Transparent" 
+                                Width="40" Height="40" Click="btn_rateBack_Click">
+                            <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <WrapPanel>
+                <Image
+    Source="{Binding}"
+    VerticalAlignment="Center"
+    HorizontalAlignment="Center" />
+            </WrapPanel>
+        </GroupBox>
+
+
+        <!--GroupBox info 4-->
+        <GroupBox x:Name="gb_post" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
+  Style="{DynamicResource MaterialDesignCardGroupBox}"
+  Margin="60 20 20 20"
+  materialDesign:ColorZoneAssist.Mode="Custom"
+  materialDesign:ColorZoneAssist.Background="#eee"
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btn_postBack" Background="#eee" BorderBrush="Transparent" 
+                                Width="40" Height="40" Click="btn_postBack_Click">
+                            <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <WrapPanel>
+                <Image
+    Source="{Binding}"
+    VerticalAlignment="Center"
+    HorizontalAlignment="Center" />
+            </WrapPanel>
+        </GroupBox>
+
 
 
     </Grid>

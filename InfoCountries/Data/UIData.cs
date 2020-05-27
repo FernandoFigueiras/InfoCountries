@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using System.Drawing.Text;
     using System.IO;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
@@ -19,7 +20,7 @@
         /// Sets the list of countries to be displayed in the UI
         /// </summary>
         /// <returns>List of countries</returns>
-        public static async Task<List<Country>> GetCountriesList(IProgress<ProgressReportService> progress)
+        public static async Task<List<Country>> GetCountriesListAsync(IProgress<ProgressReportService> progress)
         {
             DataFlow data = new DataFlow();
             List<Country> Countries = new List<Country>();
@@ -30,7 +31,7 @@
             DirectoryInfo dir = new DirectoryInfo(PathImage);
             var files = dir.GetFiles();
             ProgressReportService report = new ProgressReportService();
-
+            List<Country> temp = new List<Country>();
             if (Countries != null)
             {
 
@@ -44,11 +45,13 @@
                             {
                                 country.Image = new BitmapImage(new Uri(file.FullName));
                                 country.Image.Freeze();
-                                break;
+                                report.DataLoaded = Countries;
                             }
+                            temp.Add(country);
                         }
-                        report.DataLoaded = Countries;
-                        report.PercComplete = (Countries.Count * 100) / Countries.Count;
+                        
+                        
+                        report.PercComplete = (temp.Count * 250) / Countries.Count;
                         progress.Report(report);
 
                     });
