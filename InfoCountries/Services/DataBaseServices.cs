@@ -29,8 +29,6 @@
             string dataPath = dataBasePath + "Countries.sqlite";
 
 
-
-
             try
             {
                 connectionCountries = new SQLiteConnection("Data Source=" + dataPath);

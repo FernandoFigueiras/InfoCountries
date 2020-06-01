@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using System.Drawing.Text;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
@@ -34,28 +35,36 @@
             List<Country> temp = new List<Country>();
             if (Countries != null)
             {
-
-                await Task.Run(() =>
+                try
                 {
-                    Parallel.ForEach<Country>(Countries, (country) =>
+                    await Task.Run(() =>
                     {
-                        foreach (var file in files)
+                        Parallel.ForEach<Country>(Countries, (country) =>
                         {
-                            if (file.Name.Contains(country.Name))
+                            foreach (var file in files)
                             {
-                                country.Image = new BitmapImage(new Uri(file.FullName));
-                                country.Image.Freeze();
-                                report.DataLoaded = Countries;
+                                if (file.Name.Contains(country.Name))
+                                {
+                                    country.Image = new BitmapImage(new Uri(file.FullName));
+                                    country.Image.Freeze();
+                                    report.DataLoaded = Countries;
+                                }
+                                temp.Add(country);
                             }
-                            temp.Add(country);
-                        }
-                        
-                        
-                        report.PercComplete = (temp.Count * 250) / Countries.Count;
-                        progress.Report(report);
 
+
+                            report.PercComplete = (temp.Count * 250) / Countries.Count;
+                            progress.Report(report);
+
+                        });
                     });
-                });
+                }
+                catch 
+                {
+
+                   
+                }
+              
             }
             return Countries;
         }
@@ -72,24 +81,31 @@
         }
 
         /// <summary>
-        /// This method searches for specific Rate of a coutry selected
+        /// This method searches for specific Rate of a selected country
         /// </summary>
         /// <param name="country"></param>
         /// <returns>List of string currency name</returns>
-        public static List<Rate> ShowCountryRates(Country country, List<Rate> rates)
+        public static List<CalcRate> ShowCountryRates(Country country, List<Rate> rates)
         {
-            List<Rate> ratesListCountry = new List<Rate>();
+            List<CalcRate> ratesListCountry = new List<CalcRate>();
 
-            if (rates != null)
+            if (rates != null && country!=null)
             {
+
                 foreach (var currency in country.Currencies)
                 {
-                    foreach (var Rate in rates)
+                   var list= rates.FirstOrDefault(r => r.Code == currency.Code);
+
+                    if (list!=null)
                     {
-                        if (currency.Code == Rate.Code)
+                        ratesListCountry.Add(new CalcRate
                         {
-                            ratesListCountry.Add(Rate);//This is the name of the currencies that each country has
-                        }
+                            RateId = list.RateId,
+                            Name = list.Name,
+                            Code = list.Code,
+                            Symbol = currency.Symbol,
+                            TaxRate = list.TaxRate
+                        });
                     }
                 }
             }
@@ -102,23 +118,27 @@
         /// <param name="country"></param>
         /// <param name="OriginRate"></param>
         /// <returns> list of string currency name</returns>
-        public static List<Rate> ShowAllCoutryRates(Country country, List<Rate> OriginRate, List<Rate> rates)
+        public static List<CalcRate> ShowAllCoutryRates(Country country, List<Rate> rates)
         {
-            List<Rate> AllCountriesRates = new List<Rate>();
-            if (OriginRate.Count != 0)//If no information is available for a specific currency
-            {
+            List<CalcRate> AllCountriesRates = new List<CalcRate>();
 
-                if (rates != null)
+
+            if (rates != null && country != null)
+            {
+                foreach (var currency in country.Currencies)
                 {
-                    foreach (var currency in country.Currencies)
+                    var list = rates.Where(r => r.Code != currency.Code);
+                    foreach (var rate in list)
                     {
-                        foreach (var Rate in rates)
-                        {
-                            if (currency.Code != Rate.Code)
+                        
+                            AllCountriesRates.Add(new CalcRate
                             {
-                                AllCountriesRates.Add(Rate);//This is all currencies except the one of the country chosen
-                            }
-                        }
+                                RateId = rate.RateId,
+                                Name = rate.Name,
+                                Code = rate.Code,
+                                Symbol = currency.Symbol,
+                                TaxRate = rate.TaxRate
+                            });
                     }
                 }
             }
@@ -132,7 +152,7 @@
         /// <param name="destination"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static decimal CalculateRate(Rate origin, Rate destination, decimal value  )
+        public static decimal CalculateRate(CalcRate origin, CalcRate destination, decimal value  )
         {
             decimal calcRate = 0;
             if (origin != null && destination !=null)

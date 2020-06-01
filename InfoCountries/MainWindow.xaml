@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="MainWindow" Height="500" Width="900">
+        Title="MainWindow" Height="500" Width="1000">
     <Grid Background="#DFE0DB">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -85,39 +85,60 @@
 
         <!--Seach-->
         <Grid Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Margin="60 10 20 10" >
-            <Border  BorderBrush="#CDCDCF" CornerRadius="10" BorderThickness="4" >
-                <TextBox x:Name="tb_seach" Background="#CAC3C1" materialDesign:HintAssist.Hint="Search" 
-                         materialDesign:TextFieldAssist.UnderlineBrush="#725753"
-                         materialDesign:TextFieldAssist.HasClearButton="True" TextChanged="tb_seach_TextChanged">
-                </TextBox>
-            </Border>
+            <Border  BorderBrush="#CDCDCF" CornerRadius="10" BorderThickness="4">
+                <Grid>
 
+                    <TextBox x:Name="tb_seach" Grid.Column="0" Grid.ColumnSpan="10" Background="#CAC3C1" 
+                         materialDesign:HintAssist.Hint="Search for a Country" 
+                         materialDesign:TextFieldAssist.UnderlineBrush="#725753"
+                         TextChanged="tb_seach_TextChanged">
+                    </TextBox>
+                </Grid>
+            </Border>
         </Grid>
+        
+        <!--Close Seach Button-->
+        <Button x:Name="close_search" Background="Transparent" Grid.Column="4"  Grid.Row="1" Grid.RowSpan="2" 
+                BorderBrush="Transparent" Foreground="Black" 
+                HorizontalAlignment="Right" Click="close_search_Click" Visibility="Hidden">
+            <Image Source="/IconPack/icons8_delete_25px_1.png" Height="20" Width="20" HorizontalAlignment="Center"/>
+        </Button>
 
         <!--Menu region buttons-->
+        <Button x:Name="btn_all" Grid.Column="2" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Filtre pelos paises de Africa" 
+                Margin="0 0 15 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
+                Click="btn_all_Click">
+            Mundo
+        </Button>
         <Button x:Name="btn_africa" Grid.Column="3" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
-                materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises de Africa" 
-                Margin="0 0 15 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Filtre pelos paises de Africa" 
+                Margin="0 0 15 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
+                Click="btn_africa_Click">
             Africa
         </Button>
         <Button x:Name="btn_america" Grid.Column="4" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da America" 
-                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
+                Click="btn_america_Click">
             America
         </Button>
         <Button x:Name="btn_asia" Grid.Column="5" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da Asia" 
-                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
+                Click="btn_asia_Click">
             Asia
         </Button>
         <Button Name="btn_europa" Grid.Column="6" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da Europa" 
-                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
+                Click="btn_europa_Click">
             Europa
         </Button>
         <Button Name="btn_oceania" Grid.Column="7" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da Oceania" 
-                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1">
+                Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
+                Click="btn_oceania_Click">
             Oceania
         </Button>
 
@@ -138,17 +159,20 @@
                 <StackPanel Orientation="Vertical" Margin="8,24,10,24">
                     <Button x:Name="btn_info" Grid.Row="3"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
-                ToolTip="Clique para saber mais" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10">
+                ToolTip="Escolha um pais e clique para saber mais" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10" 
+                    Click="btn_info_Click">
                         Info
                     </Button>
                     <Button Name="btn_rate" Grid.Row="5"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
-                ToolTip="Clique " Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10">
+                ToolTip="Escolha um pais e clique para obter Cambios" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10"
+                     Click="btn_rate_Click">
                         Conversor
                     </Button>
                     <Button x:Name="btn_post" Grid.Row="7"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
-                ToolTip="Clique para saber mais" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10">
+                ToolTip="Escolha um pais e clique para comentar" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10"
+                      Click="btn_post_Click">
                         Post
                     </Button>
                     <!--<Button Grid.Row="9"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
@@ -169,7 +193,7 @@
   Margin="60 20 20 20"
   materialDesign:ColorZoneAssist.Mode="Custom"
   materialDesign:ColorZoneAssist.Background="#eee"
-  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
             <!--<GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -210,12 +234,12 @@
   Margin="60 20 20 20"
   materialDesign:ColorZoneAssist.Mode="Custom"
   materialDesign:ColorZoneAssist.Background="#eee"
-  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="btn_backCDetail" Background="#eee" BorderBrush="Transparent" 
-                                Width="40" Height="40" Click="btn_backCDetail_Click">
+                        <Button x:Name="btn_backDetail" Background="#eee" BorderBrush="Transparent" 
+                                Width="40" Height="40" Click="btn_backDetail_Click">
                             <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
@@ -288,14 +312,14 @@
         </GroupBox>
 
 
-        <!--GroupBox info 2-->
+        <!--GroupBox more info-->
         <GroupBox x:Name="gb_info_country" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
 
   Style="{DynamicResource MaterialDesignCardGroupBox}"
   Margin="60 20 20 20"
   materialDesign:ColorZoneAssist.Mode="Custom"
   materialDesign:ColorZoneAssist.Background="#eee"
-  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -316,31 +340,120 @@
             </WrapPanel>
         </GroupBox>
 
-        <!--GroupBox info 3-->
+        <!--GroupBox Rates-->
         <GroupBox x:Name="gb_rate" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
-  Style="{DynamicResource MaterialDesignCardGroupBox}"
-  Margin="60 20 20 20"
-  materialDesign:ColorZoneAssist.Mode="Custom"
-  materialDesign:ColorZoneAssist.Background="#eee"
-  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+        Style="{DynamicResource MaterialDesignCardGroupBox}"
+        Margin="60 20 20 20"
+        materialDesign:ColorZoneAssist.Mode="Custom"
+        materialDesign:ColorZoneAssist.Background="#eee"
+        materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Visible">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="btn_rateBack" Background="#eee" BorderBrush="Transparent" 
-                                Width="40" Height="40" Click="btn_rateBack_Click">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15*"/>
+
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="btn_backRate" Background="#eee" BorderBrush="Transparent" 
+                                Width="40" Height="40" Click="btn_backRate_Click" Grid.Column="0" HorizontalAlignment="Left">
                             <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                         </Button>
-                    </StackPanel>
+                        <TextBlock x:Name="Cambios" Text="Cambios" FontFamily="Stencil" FontSize="30"  Grid.Column="1"
+                                   HorizontalAlignment="Center"/>
+                    </Grid>
+
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
-            <WrapPanel>
-                <Image
-    Source="{Binding}"
-    VerticalAlignment="Center"
-    HorizontalAlignment="Center" />
-            </WrapPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Moedas do Pais" Margin="30 20 0 0" FontFamily="Palatino Linotype" FontSize="15"/>
+                <ItemsControl x:Name="Rate_details" ItemsSource="{Binding}" Grid.Column="0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+
+                            <StackPanel>
+                                   
+                                    <StackPanel Orientation="Horizontal " Margin="40 45 20 0">
+                                        <TextBlock Text="Nome" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                        <TextBlock Text="{Binding Name}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="40 15 20 0">
+                                        <TextBlock Text="Symbol " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                        <TextBlock Text="{Binding Symbol}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
+                                    </StackPanel>
+                                </StackPanel>
+                              
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <StackPanel Grid.Column="1" >
+                    <TextBlock Text="Consulte abaixo o Calculo de cambio disponivel" FontFamily="Palatino Linotype" FontSize="15"
+                               Margin="25 0 0 0"/>
+                    <TextBlock Text="Escolha uma moeda de origem" FontFamily="Sitka Banner" FontSize="15" Margin="15 0 0 15"
+                                         />
+
+                    <ComboBox  x:Name="cb_ActiveCountryRate"  Margin="0 0 0 15" ItemsSource="{Binding Name}"
+                                          Foreground="Black" materialDesign:BottomDashedLineAdorner.Brush="Black">
+
+                                </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="tb_insertRate"  Background="#eee" 
+                         materialDesign:HintAssist.Hint="Insira um valor a converter" Margin="100 0 0 15"
+                         materialDesign:BottomDashedLineAdorner.Brush="Black"
+                         IsReadOnly="True" Padding="10 0 10 0">
+                        </TextBox>
+                        <Button x:Name="bt_deleteRateInsert" Margin="10 0 0 15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent"
+                                Width="50" Click="bt_deleteRateInsert_Click">
+                            <Image Source="/IconPack/icons8_undo_25px.png"/>
+
+                            
+                        </Button>
+
+                    </StackPanel>
+                    
+                    <TextBlock Text="Escolha uma moeda de Destino" FontFamily="Sitka Banner" FontSize="15" Margin="15 0 0 15"
+                                         />
+                    <ComboBox  Name="cb_AllcountriesRate" Margin="0 0 0 15" ItemsSource="{Binding Name}"
+                                          Foreground="Black" materialDesign:BottomDashedLineAdorner.Brush="Black">
+
+                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btnCalcRate" Width="50" Margin="100 5 50 0" Background="Transparent"
+                                            BorderBrush="Transparent" BorderThickness="0" Click="btnCalcRate_Click"
+                                IsEnabled="False">
+                            <Image Source="/IconPack/icons8_checkmark_25px.png" Height="20" Width="20"
+                                               HorizontalAlignment="Center"/>
+                        </Button>
+                        <Button x:Name="btnChangeRate" Width="50" Margin="50 5 50 0" Background="Transparent"
+                                            BorderBrush="Transparent" BorderThickness="0" Click="btnChangeRate_Click"
+                                IsEnabled="False">
+                            <Image Source="/IconPack/icons8_change_25px.png" Height="20" Width="20"
+                                               HorizontalAlignment="Center"/>
+                        </Button>
+                        
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Resutado:" Margin="10 0 0 0"/>
+                        <TextBlock x:Name="tb_rateResult" Margin="15 0 0 0"></TextBlock>
+                    </StackPanel>
+                    
+                </StackPanel>
+
+            </Grid>
+
+           
         </GroupBox>
 
 
@@ -350,7 +463,7 @@
   Margin="60 20 20 20"
   materialDesign:ColorZoneAssist.Mode="Custom"
   materialDesign:ColorZoneAssist.Background="#eee"
-  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Hidden">
+  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
