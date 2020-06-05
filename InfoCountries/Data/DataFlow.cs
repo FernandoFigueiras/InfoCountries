@@ -16,7 +16,7 @@
         public List<Comment> Comments;
         public DataBaseServices dataBaseServices;
 
-        private bool SetConnectionStatus()
+        public bool SetConnectionStatus()
         {
             NetworkService networkService = new NetworkService();
 
@@ -104,11 +104,11 @@
             }
         }
 
-        public async Task<List<Comment>> GetCommentsAPIAsync(Country country)
+        public async Task<List<Comment>> GetCommentsAPIAsync()
         {
             if (SetConnectionStatus())
             {
-                Comments = await GetApiData.LoadApiCommentsAsync(country);
+                Comments = await GetApiData.LoadApiCommentsAsync();
             }
             return Comments;
         }

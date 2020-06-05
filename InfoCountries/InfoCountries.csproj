@@ -73,6 +73,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.112.2\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -95,6 +96,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\GetApiData.cs" />
     <Compile Include="Data\DataFlow.cs" />
     <Compile Include="Data\UIData.cs" />
@@ -105,11 +109,18 @@
     <Compile Include="OpenApp.xaml.cs">
       <DependentUpon>OpenApp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RatingBar.xaml.cs">
+      <DependentUpon>RatingBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\ApiService.cs" />
     <Compile Include="Services\DataBaseServices.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Services\NetworkService.cs" />
     <Compile Include="Services\ProgressReportService.cs" />
+    <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,6 +134,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="OpenApp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,6 +191,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="IconPack\icons8_undo_25px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\no-image-available.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

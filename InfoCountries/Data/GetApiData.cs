@@ -134,10 +134,10 @@
         /// </summary>
         /// <param name="country"></param>
         /// <returns> List of Comments for a country</returns>
-        public static async Task<List<Comment>> LoadApiCommentsAsync(Country country)
+        public static async Task<List<Comment>> LoadApiCommentsAsync()
         {
             ApiService apiService = new ApiService();
-            string controller = "/api/Comments/" + country.Alpha2Code;
+            string controller = "/api/Comments";
             var response = await apiService.GetCommentsAsync("http://CountriesComments.somee.com", controller);
             Comments = (List<Comment>)response.Result;
             return Comments;

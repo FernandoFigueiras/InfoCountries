@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InfoCountries"
+         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -14,7 +15,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="MainWindow" Height="500" Width="1000">
-    <Grid Background="#DFE0DB">
+    <Grid x:Name="MainGrid" Background="#DFE0DB">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -51,26 +52,18 @@
 
         <!--Top bar menu-->
         <materialDesign:ColorZone Grid.Column="0" Grid.RowSpan="2" 
-  Mode="Inverted" Grid.ColumnSpan="9" Foreground="#700005" Background="Transparent" FontSize="12">
+            Mode="Inverted" Grid.ColumnSpan="9" Foreground="#700005" Background="Transparent" FontSize="12">
             <DockPanel>
                 <materialDesign:PopupBox
-      DockPanel.Dock="Right"
-      PlacementMode="BottomAndAlignRightEdges">
+                     DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges">
                     <ListBox>
-                        <ListBoxItem HorizontalAlignment="Center">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock HorizontalAlignment="Left">Light</TextBlock>
-                                <ToggleButton  Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
-                                               ToolTip="MaterialDesignSwitchAccentToggleButton"  IsChecked="True" HorizontalAlignment="Center"/>
-                                <TextBlock HorizontalAlignment="Right">Dark</TextBlock>
-                            </StackPanel>
-                        </ListBoxItem>
+                       
                         <ListBoxItem>
-                            <Button Content="About" HorizontalContentAlignment="Center" Width="120" >
+                            <Button x:Name="btn_about" Click="btn_about_Click" Content="About" HorizontalContentAlignment="Center" Width="120" >
                             </Button>
                         </ListBoxItem>
                         <ListBoxItem>
-                            <Button Content="Exit" HorizontalContentAlignment="Center" Width="120" >
+                            <Button x:Name="btn_close" Click="btn_close_Click" Content="Exit" HorizontalContentAlignment="Center" Width="120" >
                             </Button>
                         </ListBoxItem>
                     </ListBox>
@@ -288,16 +281,10 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
                                     <TextBlock Text="Taxa de indice Gini " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
-                                    <TextBlock Text="{Binding Gini}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
+                                    <TextBlock x:Name="tb_gini" Text="{Binding Gini}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
                                 </StackPanel>
-
                             </StackPanel>
-
                         </Grid>
-
-
-
-
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
@@ -313,40 +300,12 @@
 
 
         <!--GroupBox more info-->
-        <GroupBox x:Name="gb_info_country" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
-
-  Style="{DynamicResource MaterialDesignCardGroupBox}"
-  Margin="60 20 20 20"
-  materialDesign:ColorZoneAssist.Mode="Custom"
-  materialDesign:ColorZoneAssist.Background="#eee"
-  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
-            <GroupBox.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="btn_infoBack" Background="#eee" BorderBrush="Transparent" 
-                                Width="40" Height="40" Click="btn_infoBack_Click">
-                            <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                        </Button>
-                    </StackPanel>
-                </DataTemplate>
-            </GroupBox.HeaderTemplate>
-            <WrapPanel>
-                <Image
-    Source="{Binding}"
-    VerticalAlignment="Center"
-    HorizontalAlignment="Center" />
-            </WrapPanel>
-        </GroupBox>
-
-        <!--GroupBox Rates-->
-        <GroupBox x:Name="gb_rate" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
+        <GroupBox x:Name="gb_moreInfo" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
         Style="{DynamicResource MaterialDesignCardGroupBox}"
         Margin="60 20 20 20"
         materialDesign:ColorZoneAssist.Mode="Custom"
         materialDesign:ColorZoneAssist.Background="#eee"
-        materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Visible">
+        materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
@@ -355,6 +314,124 @@
                             <ColumnDefinition Width="15*"/>
 
                         </Grid.ColumnDefinitions>
+
+                        <Button x:Name="btn_infoBack" Background="#eee" BorderBrush="Transparent" 
+                                Width="40" Height="40" Click="btn_infoBack_Click" Grid.Column="0" 
+                                HorizontalAlignment="Left">
+                            <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Button>
+                        <TextBlock Text="Info" FontFamily="Stencil" FontSize="30"  Grid.Column="1"
+                                   HorizontalAlignment="Center"/>
+                    </Grid>
+
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <ScrollViewer>
+                    <StackPanel>
+                        <TextBlock Text="Aditional Info" Margin="150 0 0 0" FontFamily="Palatino Linotype" FontSize="15" Grid.Column="0"
+                           Grid.Row="0"/>
+                    
+                        <StackPanel>
+                            <Border Width="250" Height="250" BorderThickness="1" 
+                                            BorderBrush="#696A6C" CornerRadius="3" 
+                                        HorizontalAlignment="Center" Margin="20">
+                                <Image x:Name="MapImage" VerticalAlignment="Top" 
+                               gif:ImageBehavior.AnimatedSource="{Binding}" 
+                                 gif:ImageBehavior.AutoStart="True" Source="{Binding }" />
+                            </Border>
+                            <TextBlock FontSize="8">
+                                <Hyperlink NavigateUri="https://allwavingflags.blogspot.com/" RequestNavigate="Hyperlink_RequestNavigate">
+                                    Image source
+                                </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal " Margin="40 45 20 0">
+                                        <TextBlock Text="Nome Nativo" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                        <TextBlock x:Name="tb_nativeName" Text="{Binding NativeName}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="40 15 20 0">
+                                        <TextBlock Text="Capital " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                        <TextBlock x:Name="tb_Capital" Text="{Binding Capital}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="40 15 20 0">
+                                        <TextBlock Text="Area " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                      <TextBlock x:Name="tb_Area" Text="{Binding Area}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
+                                    </StackPanel>
+                                </StackPanel>
+                </ScrollViewer>
+
+                <ScrollViewer Grid.Column="1" Margin="10">
+                    <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+                    <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="CountryinfoRight" Text="{Binding Name}" FontFamily="Palatino Linotype"
+                               FontSize="15"  Margin="25 10 0 10"/>
+                        <TextBlock Text=" faz fronteira com:" FontFamily="Palatino Linotype" 
+                                   FontSize="15" Margin="0 10 0 0"/>
+                    </StackPanel>
+                  
+                  
+                    
+
+
+                    
+                        <ItemsControl x:Name="Border_info" ItemsSource="{Binding}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button x:Name="btn_boarder" BorderBrush="#7B050A"
+                                        BorderThickness="2" Width="75" Height="75" Background="Transparent"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="{Binding Name}"
+                                                    Margin="20" Click="btn_boarder_Click">
+                                                <Image  Source="{Binding Image}"/>
+                                            </Button>
+                                            <TextBlock Text="{Binding Name}" Margin="0 45 0 0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    
+    
+                </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+
+        </GroupBox>
+
+        <!--GroupBox Rates-->
+        <GroupBox x:Name="gb_rate" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
+        Style="{DynamicResource MaterialDesignCardGroupBox}"
+        Margin="60 20 20 20"
+        materialDesign:ColorZoneAssist.Mode="Custom"
+        materialDesign:ColorZoneAssist.Background="#eee"
+        materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15*"/>
+
+                        </Grid.ColumnDefinitions>
+                        
                         <Button x:Name="btn_backRate" Background="#eee" BorderBrush="Transparent" 
                                 Width="40" Height="40" Click="btn_backRate_Click" Grid.Column="0" HorizontalAlignment="Left">
                             <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
@@ -372,8 +449,13 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Moedas do Pais" Margin="30 20 0 0" FontFamily="Palatino Linotype" FontSize="15"/>
-                <ItemsControl x:Name="Rate_details" ItemsSource="{Binding}" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="10*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Moedas do Pais" Margin="150 0 0 0" FontFamily="Palatino Linotype" FontSize="15" Grid.Column="0"
+                           Grid.Row="0"/>
+                <ItemsControl x:Name="Rate_details" ItemsSource="{Binding}" Grid.Column="0" Grid.Row="1">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
 
@@ -398,8 +480,8 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
-                <StackPanel Grid.Column="1" >
-                    <TextBlock Text="Consulte abaixo o Calculo de cambio disponivel" FontFamily="Palatino Linotype" FontSize="15"
+                <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+                    <TextBlock Text="Efectue abaixo o calculo do cambio" FontFamily="Palatino Linotype" FontSize="15"
                                Margin="25 0 0 0"/>
                     <TextBlock Text="Escolha uma moeda de origem" FontFamily="Sitka Banner" FontSize="15" Margin="15 0 0 15"
                                          />
@@ -412,10 +494,10 @@
                         <TextBox x:Name="tb_insertRate"  Background="#eee" 
                          materialDesign:HintAssist.Hint="Insira um valor a converter" Margin="100 0 0 15"
                          materialDesign:BottomDashedLineAdorner.Brush="Black"
-                         IsReadOnly="True" Padding="10 0 10 0">
+                         IsReadOnly="True" Padding="10 2 10 0" HorizontalAlignment="Center">
                         </TextBox>
                         <Button x:Name="bt_deleteRateInsert" Margin="10 0 0 15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent"
-                                Width="50" Click="bt_deleteRateInsert_Click">
+                                Width="50" Click="bt_deleteRateInsert_Click" IsEnabled="False" ToolTip="Apagar">
                             <Image Source="/IconPack/icons8_undo_25px.png"/>
 
                             
@@ -432,21 +514,21 @@
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="btnCalcRate" Width="50" Margin="100 5 50 0" Background="Transparent"
                                             BorderBrush="Transparent" BorderThickness="0" Click="btnCalcRate_Click"
-                                IsEnabled="False">
+                                IsEnabled="False" ToolTip="Converter">
                             <Image Source="/IconPack/icons8_checkmark_25px.png" Height="20" Width="20"
                                                HorizontalAlignment="Center"/>
                         </Button>
                         <Button x:Name="btnChangeRate" Width="50" Margin="50 5 50 0" Background="Transparent"
                                             BorderBrush="Transparent" BorderThickness="0" Click="btnChangeRate_Click"
-                                IsEnabled="False">
+                                IsEnabled="False" ToolTip="Trocar moeda">
                             <Image Source="/IconPack/icons8_change_25px.png" Height="20" Width="20"
                                                HorizontalAlignment="Center"/>
                         </Button>
                         
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Resutado:" Margin="10 0 0 0"/>
-                        <TextBlock x:Name="tb_rateResult" Margin="15 0 0 0"></TextBlock>
+                        <TextBlock Text="Resutado:" Margin="10 0 0 0" FontFamily="Sitka Banner" FontSize="13"/>
+                        <TextBlock x:Name="tb_rateResult" Margin="15 0 0 0" FontFamily="Sitka Banner" FontSize="13"></TextBlock>
                     </StackPanel>
                     
                 </StackPanel>
@@ -457,31 +539,86 @@
         </GroupBox>
 
 
-        <!--GroupBox info 4-->
-        <GroupBox x:Name="gb_post" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
-  Style="{DynamicResource MaterialDesignCardGroupBox}"
-  Margin="60 20 20 20"
-  materialDesign:ColorZoneAssist.Mode="Custom"
-  materialDesign:ColorZoneAssist.Background="#eee"
-  materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
+        <!--GroupBox Comments-->
+        <GroupBox x:Name="gb_Comments" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="8" Grid.RowSpan="14"
+        Style="{DynamicResource MaterialDesignCardGroupBox}"
+        Margin="60 20 20 20"
+        materialDesign:ColorZoneAssist.Mode="Custom"
+        materialDesign:ColorZoneAssist.Background="#eee"
+        materialDesign:ColorZoneAssist.Foreground="#7B050A" Visibility="Collapsed">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="btn_postBack" Background="#eee" BorderBrush="Transparent" 
-                                Width="40" Height="40" Click="btn_postBack_Click">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15*"/>
+
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="btn_backComment" Background="#eee" BorderBrush="Transparent" 
+                                Width="40" Height="40" Grid.Column="0" HorizontalAlignment="Left"
+                                Click="btn_backComment_Click">
                             <Image Source="/IconPack/icons8_back_30px.png" Height="20" Width="20" 
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                         </Button>
-                    </StackPanel>
+                        <TextBlock x:Name="Comments" Text="Comentarios" FontFamily="Stencil" FontSize="30"  Grid.Column="1"
+                                   HorizontalAlignment="Center"/>
+                    </Grid>
+
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
-            <WrapPanel>
-                <Image
-    Source="{Binding}"
-    VerticalAlignment="Center"
-    HorizontalAlignment="Center" />
-            </WrapPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="10*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Comentarios" Margin="150 0 0 0" FontFamily="Palatino Linotype" FontSize="15" Grid.Column="0"
+                           Grid.Row="0"/>
+                <ScrollViewer Grid.Column="0" Grid.Row="1">
+                    <ItemsControl x:Name="comments_details" ItemsSource="{Binding}" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="250" Height="40" Margin="0,2,5,2" CornerRadius="3" BorderBrush="#7B050A" BorderThickness="1">
+                                    <TextBox Text="{Binding Comments}" Padding="10 0 0 0 " IsReadOnly="True" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock Text="Insira comentario para " Margin="50 0 0 0" FontFamily="Palatino Linotype" FontSize="15" />
+                    <TextBlock x:Name="tb_comentCountry" Text="{Binding Name}" FontFamily="Palatino Linotype" FontSize="15" ></TextBlock>
+                </StackPanel >
+              
+
+                <StackPanel Grid.Column="1" Grid.Row="2">
+                    <TextBox x:Name="tb_post" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" VerticalAlignment="Top"
+                      Height="75" AcceptsReturn="True"  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                             materialDesign:HintAssist.Hint="Insert your comment here. Max 150 caracters" 
+                             IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignOutlinedTextFieldTextBoxEnabledComboBox}" 
+                             Margin="10 30 10 0" MaxLength="150"/>
+                    
+                            <Button x:Name="btn_postComment" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                     Foreground="#7B050A" Background="#CAC3C1" BorderBrush="Transparent"
+                                    Click="btn_postComment_Click" Margin="0 10 0 0">
+                                POST
+                            </Button>
+
+                </StackPanel>
+
+
+            </Grid>
+
+
         </GroupBox>
 
 

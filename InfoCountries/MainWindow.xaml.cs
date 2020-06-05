@@ -5,18 +5,17 @@
     using InfoCountries.Services;
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Data.Linq;
+    using System.Diagnostics;
+    using System.Drawing;
+    using System.IO;
     using System.Linq;
-    using System.Security.Cryptography;
     using System.Text.RegularExpressions;
-    using System.Threading;
     using System.Threading.Tasks;
-    using System.Web.WebSockets;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using Color = System.Drawing.Color;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -25,10 +24,12 @@
     {
         private List<Country> Countries;
         private List<Rate> Rates;
-        private List<Comment> CommentsCountry;
+
 
         private Progress<ProgressReportService> progress;
         private OpenApp openApp;
+        private About about;
+        RatingBar ratingBar;
 
         private List<Country> Africa = new List<Country>();
         private List<Country> America = new List<Country>();
@@ -36,21 +37,23 @@
         private List<Country> Europe = new List<Country>();
         private List<Country> Oceania = new List<Country>();
         private List<Country> ShowCountry = new List<Country>();
+        private List<Comment> CommentsCountry = new List<Comment>();
 
         public MainWindow()
         {
-            
             InitializeComponent();
             progress = new Progress<ProgressReportService>();
             openApp = new OpenApp(this, progress);
             openApp.Show();
             this.Hide();
-            load();            
+            load();
+
         }
 
         private void load()
         {
             Task.FromResult(UISettings());
+
         }
 
 
@@ -61,14 +64,22 @@
         public async Task UISettings()
         {
             Countries = await UIData.GetCountriesListAsync(progress);
+            total_countries_info.DataContext = Countries;
+
             gb_info_start.Visibility = Visibility.Visible;
 
 
             Rates = await UIData.GetRatesAsync();
-  
-            SaveData();
-            total_countries_info.DataContext = Countries;
+            CommentsCountry = Task.Run(() => UIData.GetCommentsData()).Result;
+
+
+            if (Countries.Count > 0 && Rates.Count > 0)
+            {
+                SaveData();
+            }
+
         }
+
 
         private void SaveData()
         {
@@ -81,11 +92,12 @@
         {
             Button btn_image = sender as Button;
             var country = (Country)btn_image.DataContext;
-            if (country!= null)
+            if (country != null)
             {
                 ShowCountryInformation(country);
                 gb_info_start.Visibility = Visibility.Collapsed;
                 tb_seach.IsEnabled = false;
+                SetRatesWindow(country);
             }
         }
 
@@ -95,16 +107,81 @@
             gb_country_details.Visibility = Visibility.Visible;
             ShowCountry.Add(country);
             country_details.ItemsSource = ShowCountry;
+
+            var list = ShowCountry.Where(c => c.Gini == null).ToList();
         }
 
-        private void btn_infoBack_Click(object sender, RoutedEventArgs e)
+        private void ShowMoreInfo()
         {
+            Border_info.ItemsSource = null;
+            MapImage.DataContext = null;
+            var country = ShowCountry.FirstOrDefault();
+            CountryinfoRight.DataContext = country;
+            tb_nativeName.DataContext = country;
+            tb_Capital.DataContext = country;
+            tb_Area.DataContext = country;
+            var boarders = country.Borders;
+            List<Country> boardersCountry = new List<Country>();
 
-        }
+            if (boarders.Count == 0)
+            {
+                boardersCountry.Add(new Country
+                {
+                    Name = "No borders available",
+                    Image = new BitmapImage(new Uri(@"\Images\no-image-available.jpg", UriKind.Relative))
+
+                });
+                Border_info.ItemsSource = boardersCountry;
+            }
+            else
+            {
+                foreach (var item in boarders)
+                {
+                    var b = Countries.FirstOrDefault(c => c.Alpha3Code == item);
+                    boardersCountry.Add(b);
+                }
+            }
+            Border_info.ItemsSource = boardersCountry;
 
 
-        private void btn_postBack_Click(object sender, RoutedEventArgs e)
-        {
+            string PathImage = Path.Combine($@"{Environment.CurrentDirectory}\MapsGif");
+            DirectoryInfo dir = new DirectoryInfo(PathImage);
+            var files = dir.GetFiles();
+
+            string path = $@"{country.Name}.gif";
+
+
+            try
+            {
+                FileInfo exists = files.FirstOrDefault(f => f.Name == path);
+                if (exists != null)
+                {
+                    if (exists.Exists)
+                    {
+                        string fullPath = $@"{PathImage}\{path}";
+                        MapImage.DataContext = fullPath;
+                    }
+                    else
+                    {
+                        string noimagePath = $@"\Images\no-image-available.jpg";
+                        MapImage.DataContext = noimagePath;
+                    }
+                }
+                else
+                {
+                    string noimagePath = $@"\Images\no-image-available.jpg";
+                    MapImage.DataContext = noimagePath;
+                }
+
+            }
+            catch
+            {
+
+                string noimagePath = $@"\Images\no-image-available.jpg";
+                MapImage.DataContext = noimagePath;
+            }
+
+
 
         }
 
@@ -113,31 +190,31 @@
             if (!string.IsNullOrEmpty(tb_seach.Text))
             {
                 close_search.Visibility = Visibility.Visible;
-                if (Africa.Count>0)
+                if (Africa.Count > 0)
                 {
                     List<Country> SearchCountries = new List<Country>();
                     SearchCountries = Africa.Where(n => n.Name.ToLower().StartsWith(tb_seach.Text.ToLower())).ToList();
                     total_countries_info.ItemsSource = SearchCountries;
                 }
-                else if (America.Count>0)
+                else if (America.Count > 0)
                 {
                     List<Country> SearchCountries = new List<Country>();
                     SearchCountries = America.Where(n => n.Name.ToLower().StartsWith(tb_seach.Text.ToLower())).ToList();
                     total_countries_info.ItemsSource = SearchCountries;
                 }
-                else if (Asia.Count>0)
+                else if (Asia.Count > 0)
                 {
                     List<Country> SearchCountries = new List<Country>();
                     SearchCountries = Asia.Where(n => n.Name.ToLower().StartsWith(tb_seach.Text.ToLower())).ToList();
                     total_countries_info.ItemsSource = SearchCountries;
                 }
-               else if (Europe.Count>0)
+                else if (Europe.Count > 0)
                 {
                     List<Country> SearchCountries = new List<Country>();
                     SearchCountries = Europe.Where(n => n.Name.ToLower().StartsWith(tb_seach.Text.ToLower())).ToList();
                     total_countries_info.ItemsSource = SearchCountries;
                 }
-                else if (Oceania.Count>0)
+                else if (Oceania.Count > 0)
                 {
                     List<Country> SearchCountries = new List<Country>();
                     SearchCountries = Oceania.Where(n => n.Name.ToLower().StartsWith(tb_seach.Text.ToLower())).ToList();
@@ -177,14 +254,11 @@
                 {
                     total_countries_info.ItemsSource = Countries;
                 }
-                
+
             }
         }
 
-        private void btn_info_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
 
         //___________________________________________________ TOP Buttons Controls
         private void btn_all_Click(object sender, RoutedEventArgs e)
@@ -251,23 +325,23 @@
         private void close_search_Click(object sender, RoutedEventArgs e)
         {
             tb_seach.Text = string.Empty;
-            if (Africa.Count>0)
+            if (Africa.Count > 0)
             {
                 total_countries_info.ItemsSource = Africa;
             }
-            else if (America.Count>0)
+            else if (America.Count > 0)
             {
                 total_countries_info.ItemsSource = America;
             }
-            else if (Asia.Count>0)
+            else if (Asia.Count > 0)
             {
                 total_countries_info.ItemsSource = Asia;
             }
-            else if (Europe.Count>0)
+            else if (Europe.Count > 0)
             {
                 total_countries_info.ItemsSource = Europe;
             }
-            else if (Oceania.Count>0)
+            else if (Oceania.Count > 0)
             {
                 total_countries_info.ItemsSource = Oceania;
             }
@@ -275,6 +349,15 @@
             {
                 total_countries_info.ItemsSource = Countries;
             }
+        }
+
+        private void btn_infoBack_Click(object sender, RoutedEventArgs e)
+        {
+            gb_moreInfo.Visibility = Visibility.Collapsed;
+            gb_country_details.Visibility = Visibility.Visible;
+            tb_seach.IsEnabled = true;
+            Border_info.ItemsSource = null;
+            ShowCountry.Clear();
         }
 
         private void btn_backDetail_Click(object sender, RoutedEventArgs e)
@@ -286,16 +369,72 @@
             ShowCountry.Clear();
         }
 
+        private void btn_backComment_Click(object sender, RoutedEventArgs e)
+        {
+            gb_Comments.Visibility = Visibility.Collapsed;
+            gb_country_details.Visibility = Visibility.Visible;
+            comments_details.ItemsSource = null;
+        }
+        private void btn_backRate_Click(object sender, RoutedEventArgs e)
+        {
+            gb_rate.Visibility = Visibility.Collapsed;
+            gb_country_details.Visibility = Visibility.Visible;
+            Rate_details.ItemsSource = null;
+            tb_insertRate.Text = string.Empty;
+            tb_rateResult.Text = string.Empty;
+        }
+
+        //___________________________________________________ SIDE Buttons
         private void btn_rate_Click(object sender, RoutedEventArgs e)
         {
-            if (ShowCountry.Count==0)
+            gb_moreInfo.Visibility = Visibility.Collapsed;
+            gb_Comments.Visibility = Visibility.Collapsed;
+            if (ShowCountry.Count == 0)
             {
                 return;
             }
             Country country = ShowCountry.FirstOrDefault();
-            SetRatesWindow(country);
 
             gb_rate.Visibility = Visibility.Visible;
+        }
+        private void btn_info_Click(object sender, RoutedEventArgs e)
+        {
+            gb_rate.Visibility = Visibility.Collapsed;
+            gb_Comments.Visibility = Visibility.Collapsed;
+            if (ShowCountry.Count == 0)
+            {
+                return;
+            }
+            Country country = ShowCountry.FirstOrDefault();
+
+            gb_moreInfo.Visibility = Visibility.Visible;
+            ShowMoreInfo();
+        }
+        private void btn_post_Click(object sender, RoutedEventArgs e)
+        {
+
+            ShowComment();
+        }
+        //__________________________________________________________________________
+
+
+        /// <summary>
+        /// returns a from list of comments all comments for the selected country
+        /// </summary>
+        private void ShowComment()
+        {
+            if (ShowCountry.Count == 0)
+            {
+                return;
+            }
+            gb_moreInfo.Visibility = Visibility.Collapsed;
+            gb_rate.Visibility = Visibility.Collapsed;
+            comments_details.ItemsSource = null;
+            Country country = ShowCountry.FirstOrDefault();
+            List<Comment> comment = CommentsCountry.Where(c => c.Alphacode == country.Alpha2Code).ToList();
+            tb_comentCountry.DataContext = country;
+            comments_details.ItemsSource = comment;
+            gb_Comments.Visibility = Visibility.Visible;
         }
 
 
@@ -315,15 +454,16 @@
             Rate_details.ItemsSource = null;
             Rate_details.ItemsSource = currency;
             List<CalcRate> CountryRate = new List<CalcRate>();
-            
+
             CountryRate = Task.Run(() => UIData.ShowCountryRates(country, Rates)).Result;
-            
+
             cb_ActiveCountryRate.DisplayMemberPath = "Name";
             List<CalcRate> allRates = new List<CalcRate>();
-            allRates = Task.Run(() => UIData.ShowAllCoutryRates(country,  Rates)).Result;
+            allRates = Task.Run(() => UIData.ShowAllCoutryRates(country, Rates)).Result;
             if (CountryRate.Count == 0)
             {
-                CountryRate.Add(new CalcRate {
+                CountryRate.Add(new CalcRate
+                {
                     Name = "Informação indísponível",
                 });
                 cb_ActiveCountryRate.ItemsSource = CountryRate;
@@ -331,14 +471,14 @@
                 tb_insertRate.IsReadOnly = true;
                 btnCalcRate.IsEnabled = false;
                 btnChangeRate.IsEnabled = false;
-                bt_deleteRateInsert.IsEnabled=false;
+                bt_deleteRateInsert.IsEnabled = false;
                 allRates.Clear();
             }
             else
             {
                 cb_ActiveCountryRate.ItemsSource = CountryRate;
                 cb_ActiveCountryRate.DisplayMemberPath = "Name";
-                
+
             }
 
             if (allRates.Count == 0)
@@ -358,45 +498,34 @@
             }
         }
 
-        private void btn_post_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
-
-        private void btn_backRate_Click(object sender, RoutedEventArgs e)
-        {
-            gb_rate.Visibility = Visibility.Collapsed;
-            gb_country_details.Visibility = Visibility.Visible;
-            Rate_details.ItemsSource = null;
-            tb_insertRate.Text = string.Empty;
-            tb_rateResult.Text = string.Empty;
-        }
 
         private void btnCalcRate_Click(object sender, RoutedEventArgs e)
         {
             CalcRate origin = (CalcRate)cb_ActiveCountryRate.SelectedItem;
             CalcRate destination = (CalcRate)cb_AllcountriesRate.SelectedItem;
             if (origin != null && destination != null)
-         
+
                 if (string.IsNullOrWhiteSpace(tb_insertRate.Text))
                 {
                     MessageBox.Show("Por favor insira um valor a converter");
                     return;
                 }
-                
-                string input = tb_insertRate.Text;
-                if (Regex.IsMatch(input, @"^-?[0-9][0-9,\.]+$"))
-                {
-                
-                
-                    tb_rateResult.Text =$"{tb_insertRate.Text} {origin} correspondem a: {Environment.NewLine} {Convert.ToString(decimal.Round(Convert.ToDecimal(UIData.CalculateRate(origin, destination, Convert.ToDecimal(input))), 2))} {destination.Name}";
-                }
-                else
-                {
-                    MessageBox.Show("O valor a converter tem de ser numerico");
-                    return;
-                }
+
+            string input = tb_insertRate.Text;
+            if (Regex.IsMatch(input, @"^-?[0-9][0-9,\.]+$"))
+            {
+
+
+                tb_rateResult.Text = $"{tb_insertRate.Text} {origin} correspondem a: {Environment.NewLine}          " +
+                $"   {Convert.ToString(decimal.Round(Convert.ToDecimal(UIData.CalculateRate(origin, destination, Convert.ToDecimal(input))), 2))} {destination.Name}";
             }
+            else
+            {
+                MessageBox.Show("O valor a converter tem de ser numerico");
+                return;
+            }
+        }
 
         private void btnChangeRate_Click(object sender, RoutedEventArgs e)
         {
@@ -407,6 +536,8 @@
             destination = change;
             cb_ActiveCountryRate.ItemsSource = origin;
             cb_AllcountriesRate.ItemsSource = destination;
+            tb_insertRate.Text = string.Empty;
+            tb_rateResult.Text = string.Empty;
         }
 
         private void bt_deleteRateInsert_Click(object sender, RoutedEventArgs e)
@@ -414,24 +545,98 @@
             tb_insertRate.Text = string.Empty;
             tb_rateResult.Text = string.Empty;
         }
-    }
-    }
 
-    //    private void post_Click(object sender, RoutedEventArgs e)
-    //    {
-    //        Country country = (Country)ListBoxCountries.SelectedItem;
-    //        DataFlow dataFlow = new DataFlow();
+        private void btn_postComment_Click(object sender, RoutedEventArgs e)
+        {
+            DataFlow dataFlow = new DataFlow();
+            if (!dataFlow.SetConnectionStatus())
+            {
+                MessageService.ShowMessage("Erro", "Para poder comentar necessita de conexao a internet");
+                return;
+            }
+            if (ShowCountry.Count == 0)
+            {
+                return;
+            }
+            var country = ShowCountry.FirstOrDefault();
 
-    //        if (!string.IsNullOrWhiteSpace(posttext.Text) && country != null)
-    //        {
-    //            Comment comment = new Comment
-    //            {
-    //                Alphacode = country.Alpha2Code,
-    //                Comments = posttext.Text,
-    //            };
-    //            Task.Run(() => dataFlow.PostCommentsData(country, comment));
-    //        }
-    //        return;
-    //    }
-    //}
+            if (!string.IsNullOrWhiteSpace(tb_post.Text) && country != null)
+            {
+                var date = DateTime.Now;
+
+                Comment comment = new Comment
+                {
+                    Alphacode = country.Alpha2Code,
+                    Comments = tb_post.Text,
+                    Date = date
+                };
+                MessageBoxResult result = MessageBox.Show("O seu Post foi realizado com sucesso",
+                                           "Confirmation",
+                                           MessageBoxButton.YesNo,
+                                           MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Task.Run(() => dataFlow.PostCommentsData(country, comment));
+                    gb_Comments.Visibility = Visibility.Collapsed;
+                    gb_Comments.Visibility = Visibility.Visible;
+                    CommentsCountry.Add(comment);
+                }
+                else
+                {
+                    tb_post.Text = string.Empty;
+                    return;
+                }
+            }
+            else
+            {
+                MessageService.ShowMessage("", "Por favor escreva um comentario");
+            }
+            ShowComment();
+        }
+
+        private void btn_boarder_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn_image = sender as Button;
+            var country = (Country)btn_image.DataContext;
+            if (country != null && country.Name != "No borders available")
+            {
+                ShowCountryInformation(country);
+                gb_info_start.Visibility = Visibility.Collapsed;
+                tb_seach.IsEnabled = false;
+                SetRatesWindow(country);
+                gb_moreInfo.Visibility = Visibility.Collapsed;
+                gb_country_details.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                return;
+            }
+
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
+        private void btn_close_Click(object sender, RoutedEventArgs e)
+        {
+            ratingBar = new RatingBar();
+            ratingBar.Show();
+            this.Hide();
+        }
+
+        private void btn_about_Click(object sender, RoutedEventArgs e)
+        {
+
+            about = new About(this);
+            about.Show();
+        }
+
+    }
+}
+
+
+
 

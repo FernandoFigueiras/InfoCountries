@@ -1,6 +1,7 @@
 ﻿namespace InfoCountries.Models
 {
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Windows.Media.Imaging;
     public class Country
     {
@@ -17,7 +18,7 @@
         public List<double> Latlng { get; set; }
         public string Demonym { get; set; }
         public double? Area { get; set; }
-        public double? Gini { get; set; }
+        public string Gini { get; set; }
         public List<string> Timezones { get; set; }
         public List<string> Borders { get; set; }
         public string NativeName { get; set; }

@@ -6,6 +6,8 @@
     using System.Data.Common;
     using System.Data.SQLite;
     using System.IO;
+    using System.Windows;
+
     public class DataBaseServices
     {
         private SQLiteConnection connectionCountries;
@@ -39,7 +41,7 @@
                     "Region nvarchar(30)," +
                     "Subregion nvarchar(30), " +
                     "Population int," +
-                    "Gini decimal)";
+                    "Gini  nvarchar(30))";
 
 
                 command = new SQLiteCommand(sqlCommand, connectionCountries);
@@ -77,20 +79,9 @@
 
                 foreach (var Country in Countries)
                 {
-
-                    if (Country.Gini != null)
-                    {
-                        string sql = string.Format($"insert into countries values ('{Country.Name.Replace("'", " ")}', '{Country.Capital.Replace("'", " ")}', '{Country.Region}', '{Country.Subregion}', {Country.Population}, {Country.Gini});");
+                    string sql = string.Format($"insert into countries values ('{Country.Name.Replace("'", " ")}', '{Country.Capital.Replace("'", " ")}', '{Country.Region.Replace("'", " ")}', '{Country.Subregion.Replace("'", " ")}', {Country.Population}, '{Country.Gini}');");
                         command = new SQLiteCommand(sql, connectionCountries);
-                    }
-                    else
-                    {
-                        string sql = string.Format($"insert into countries values ('{Country.Name.Replace("'", " ")}','{Country.Capital.Replace("'", " ")}', '{Country.Region}', '{Country.Subregion}', {Country.Population}, 0);");
-                        command = new SQLiteCommand(sql, connectionCountries);
-                    }
-
-
-
+                   
                     command.ExecuteNonQuery();
 
                 }
@@ -98,7 +89,6 @@
             }
             catch (Exception e)
             {
-
                 MessageService.ShowMessage("Erro", e.Message);
             }
 
@@ -129,9 +119,9 @@
                         Region = reader["Region"].ToString(),
                         Subregion = reader["Subregion"].ToString(),
                         Population = Convert.ToInt32(reader["Population"]),
-                        Gini = Convert.ToDouble(reader["Gini"])
+                        Gini = Convert.ToString(reader["Gini"])
 
-                    }); ; ;
+                    });
                 }
                 connectionCountries.Close();
                 return Countries;
