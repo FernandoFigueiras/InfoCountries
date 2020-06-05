@@ -195,6 +195,12 @@
   <ItemGroup>
     <Resource Include="Images\no-image-available.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="mainicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IconPack\MainIcon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

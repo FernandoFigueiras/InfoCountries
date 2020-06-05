@@ -14,7 +14,8 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="MainWindow" Height="500" Width="1000">
+        Title="MainWindow" Height="500" Width="1000" WindowStyle="None" Icon="mainicon.png"
+        WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
     <Grid x:Name="MainGrid" Background="#DFE0DB">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
