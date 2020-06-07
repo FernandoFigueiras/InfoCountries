@@ -94,7 +94,7 @@
         <!--Close Seach Button-->
         <Button x:Name="close_search" Background="Transparent" Grid.Column="4"  Grid.Row="1" Grid.RowSpan="2" 
                 BorderBrush="Transparent" Foreground="Black" 
-                HorizontalAlignment="Right" Click="close_search_Click" Visibility="Hidden">
+                HorizontalAlignment="Right" Click="close_search_Click" Visibility="Hidden" Margin="0 0 15 0">
             <Image Source="/IconPack/icons8_delete_25px_1.png" Height="20" Width="20" HorizontalAlignment="Center"/>
         </Button>
 
@@ -103,7 +103,7 @@
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Filtre pelos paises de Africa" 
                 Margin="0 0 15 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
                 Click="btn_all_Click">
-            Mundo
+            World
         </Button>
         <Button x:Name="btn_africa" Grid.Column="3" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Filtre pelos paises de Africa" 
@@ -127,7 +127,7 @@
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da Europa" 
                 Margin="0 0 10 25" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
                 Click="btn_europa_Click">
-            Europa
+            Europe
         </Button>
         <Button Name="btn_oceania" Grid.Column="7" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" ToolTip="Clique para abrir os paises da Oceania" 
@@ -153,19 +153,19 @@
                 <StackPanel Orientation="Vertical" Margin="8,24,10,24">
                     <Button x:Name="btn_info" Grid.Row="3"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
-                ToolTip="Escolha um pais e clique para saber mais" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10" 
+                ToolTip="Choose a country and click to learn more" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10" 
                     Click="btn_info_Click">
                         Info
                     </Button>
                     <Button Name="btn_rate" Grid.Row="5"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
-                ToolTip="Escolha um pais e clique para obter Cambios" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10"
+                ToolTip="Choose a country and click to convert currency" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10"
                      Click="btn_rate_Click">
-                        Conversor
+                        Converter
                     </Button>
                     <Button x:Name="btn_post" Grid.Row="7"  Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="1" BorderBrush="#FAFAFA" 
-                ToolTip="Escolha um pais e clique para comentar" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10"
+                ToolTip="Choose a country and click to comment" Margin="0 0 0 55" FontFamily="Century Gothic" FontSize="10"
                       Click="btn_post_Click">
                         Post
                     </Button>
@@ -261,7 +261,7 @@
 
                             <StackPanel Grid.Column="1">
                                 <StackPanel Orientation="Horizontal " Margin="20 30 20 0">
-                                    <TextBlock Text="Nome" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="Name" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
                                     <TextBlock Text="{Binding Name}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
@@ -269,19 +269,19 @@
                                     <TextBlock Text="{Binding Capital}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
-                                    <TextBlock Text="Regiao " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="Region " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
                                     <TextBlock Text="{Binding Region}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
-                                    <TextBlock Text="Sub-Regiao " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="Subregion " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
                                     <TextBlock Text="{Binding Subregion}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
-                                    <TextBlock Text="Populacao " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="Population " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
                                     <TextBlock Text="{Binding Population}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="20 30 20 0">
-                                    <TextBlock Text="Taxa de indice Gini " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                    <TextBlock Text="Gini index rate " FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
                                     <TextBlock x:Name="tb_gini" Text="{Binding Gini}" Margin="5 0 0 0 " FontFamily="Rockwell" FontSize="12"/>
                                 </StackPanel>
                             </StackPanel>
@@ -357,7 +357,7 @@
                             </TextBlock>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal " Margin="40 45 20 0">
-                                        <TextBlock Text="Nome Nativo" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                            <TextBlock Text="Native Name" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
                                         <TextBlock x:Name="tb_nativeName" Text="{Binding NativeName}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="40 15 20 0">
@@ -376,7 +376,7 @@
                     <StackPanel Orientation="Horizontal">
                     <TextBlock x:Name="CountryinfoRight" Text="{Binding Name}" FontFamily="Palatino Linotype"
                                FontSize="15"  Margin="25 10 0 10"/>
-                        <TextBlock Text=" faz fronteira com:" FontFamily="Palatino Linotype" 
+                        <TextBlock Text=" borders:" FontFamily="Palatino Linotype" 
                                    FontSize="15" Margin="0 10 0 0"/>
                     </StackPanel>
                   
@@ -439,7 +439,7 @@
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                         </Button>
-                        <TextBlock x:Name="Cambios" Text="Cambios" FontFamily="Stencil" FontSize="30"  Grid.Column="1"
+                        <TextBlock x:Name="Cambios" Text="rates" FontFamily="Stencil" FontSize="30"  Grid.Column="1"
                                    HorizontalAlignment="Center"/>
                     </Grid>
 
@@ -454,7 +454,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="10*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Moedas do Pais" Margin="150 0 0 0" FontFamily="Palatino Linotype" FontSize="15" Grid.Column="0"
+                <TextBlock Text="Country coins" Margin="150 0 0 0" FontFamily="Palatino Linotype" FontSize="15" Grid.Column="0"
                            Grid.Row="0"/>
                 <ItemsControl x:Name="Rate_details" ItemsSource="{Binding}" Grid.Column="0" Grid.Row="1">
                     <ItemsControl.ItemTemplate>
@@ -463,7 +463,7 @@
                             <StackPanel>
                                    
                                     <StackPanel Orientation="Horizontal " Margin="40 45 20 0">
-                                        <TextBlock Text="Nome" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
+                                        <TextBlock Text="Name" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="15"/>
                                         <TextBlock Text="{Binding Name}" Margin="5 0 0 0" FontFamily="Rockwell" FontSize="12"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="40 15 20 0">
@@ -482,9 +482,9 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
                 <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
-                    <TextBlock Text="Efectue abaixo o calculo do cambio" FontFamily="Palatino Linotype" FontSize="15"
+                    <TextBlock Text="Calculate the exchange rate below" FontFamily="Palatino Linotype" FontSize="15"
                                Margin="25 0 0 0"/>
-                    <TextBlock Text="Escolha uma moeda de origem" FontFamily="Sitka Banner" FontSize="15" Margin="15 0 0 15"
+                    <TextBlock Text="Choose a source currency" FontFamily="Sitka Banner" FontSize="15" Margin="15 0 0 15"
                                          />
 
                     <ComboBox  x:Name="cb_ActiveCountryRate"  Margin="0 0 0 15" ItemsSource="{Binding Name}"
@@ -493,7 +493,7 @@
                                 </ComboBox>
                     <StackPanel Orientation="Horizontal">
                         <TextBox x:Name="tb_insertRate"  Background="#eee" 
-                         materialDesign:HintAssist.Hint="Insira um valor a converter" Margin="100 0 0 15"
+                         materialDesign:HintAssist.Hint="Insert a value to convert" Margin="100 0 0 15"
                          materialDesign:BottomDashedLineAdorner.Brush="Black"
                          IsReadOnly="True" Padding="10 2 10 0" HorizontalAlignment="Center">
                         </TextBox>
@@ -505,8 +505,8 @@
                         </Button>
 
                     </StackPanel>
-                    
-                    <TextBlock Text="Escolha uma moeda de Destino" FontFamily="Sitka Banner" FontSize="15" Margin="15 0 0 15"
+
+                    <TextBlock Text="Choose a target currency" FontFamily="Sitka Banner" FontSize="15" Margin="15 0 0 15"
                                          />
                     <ComboBox  Name="cb_AllcountriesRate" Margin="0 0 0 15" ItemsSource="{Binding Name}"
                                           Foreground="Black" materialDesign:BottomDashedLineAdorner.Brush="Black">
@@ -528,7 +528,7 @@
                         
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Resutado:" Margin="10 0 0 0" FontFamily="Sitka Banner" FontSize="13"/>
+                        <TextBlock Text="Result:" Margin="10 0 0 0" FontFamily="Sitka Banner" FontSize="13"/>
                         <TextBlock x:Name="tb_rateResult" Margin="15 0 0 0" FontFamily="Sitka Banner" FontSize="13"></TextBlock>
                     </StackPanel>
                     
@@ -562,7 +562,7 @@
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                         </Button>
-                        <TextBlock x:Name="Comments" Text="Comentarios" FontFamily="Stencil" FontSize="30"  Grid.Column="1"
+                        <TextBlock x:Name="Comments" Text="Comments" FontFamily="Stencil" FontSize="30"  Grid.Column="1"
                                    HorizontalAlignment="Center"/>
                     </Grid>
 
@@ -577,7 +577,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="10*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Comentarios" Margin="150 0 0 0" FontFamily="Palatino Linotype" FontSize="15" Grid.Column="0"
+                <TextBlock Text="Comments" Margin="150 0 0 0" FontFamily="Palatino Linotype" FontSize="15" Grid.Column="0"
                            Grid.Row="0"/>
                 <ScrollViewer Grid.Column="0" Grid.Row="1">
                     <ItemsControl x:Name="comments_details" ItemsSource="{Binding}" >
@@ -596,7 +596,7 @@
                     </ItemsControl>
                 </ScrollViewer>
                 <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
-                    <TextBlock Text="Insira comentario para " Margin="50 0 0 0" FontFamily="Palatino Linotype" FontSize="15" />
+                    <TextBlock Text="Insert comment for " Margin="50 0 0 0" FontFamily="Palatino Linotype" FontSize="15" />
                     <TextBlock x:Name="tb_comentCountry" Text="{Binding Name}" FontFamily="Palatino Linotype" FontSize="15" ></TextBlock>
                 </StackPanel >
               

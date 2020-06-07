@@ -2,6 +2,7 @@
 {
     using Models;
     using Services;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Web.Management;
@@ -25,10 +26,11 @@
             if (checkconnection.IsSuccess)
             {
                 return true;
+               
             }
             else
             {
-                MessageService.ShowMessage("Erro", checkconnection.Message);
+                
                 return false;
             }
         }
@@ -48,14 +50,16 @@
             }
             else
             {
+                MessageService.ShowMessage("Error", "Set up your Internet connection");
                 Countries = dataBaseServices.GetCountriesData();
             }
 
             if (!SetConnectionStatus())
             {
+                
                 if (Countries.Count == 0)
                 {
-                    MessageService.ShowMessage("Error", "Primeira utilização desta aplicação requer uma ligação válida à internet");
+                    MessageService.ShowMessage("Error", "First use of this application requires a valid internet connection");
                 }
             }
             return Countries;
@@ -82,12 +86,15 @@
         /// <returns>List of Rate</returns>
         public async Task<List<Rate>> GetRatesAPIDataAsync()
         {
+            dataBaseServices = new DataBaseServices();
+            
             if (SetConnectionStatus())
             {
                 Rates = await GetApiData.LoadRatesFromAPIAsync();
             }
             else
             {
+               
                 Rates = dataBaseServices.GetRatesData();
             }
 

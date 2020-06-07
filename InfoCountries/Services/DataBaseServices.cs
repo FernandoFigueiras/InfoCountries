@@ -12,6 +12,7 @@
     {
         private SQLiteConnection connectionCountries;
         private SQLiteConnection connectionRates;
+        private SQLiteConnection connectionBorders;
 
         private SQLiteCommand command;
 
@@ -52,9 +53,11 @@
                 connectionRates = new SQLiteConnection("Data Source=" + dataPath2);
                 connectionRates.Open();
 
-                string sqlCommand2 = "create table if not exists Rates(RateId int primary key, Code varchar(3), TaxeRate real, nome varchar(150))";
+                string sqlCommand2 = "create table if not exists Rates(RateId int primary key, Code varchar(3), TaxRate real, Name varchar(150))";
                 command = new SQLiteCommand(sqlCommand2, connectionRates);
                 command.ExecuteNonQuery();
+
+
 
             }
             catch (Exception e)
@@ -143,13 +146,13 @@
         {
             try
             {
-                string sqlCommand = "delete from rates";
+                string sqlCommand = "delete from Rates";
                 command = new SQLiteCommand(sqlCommand, connectionRates);
                 command.ExecuteNonQuery();
 
                 foreach (var rate in rates)
                 {
-                    string sql = string.Format($"insert into rates values ({rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name}');");
+                    string sql = string.Format($"insert into Rates values ({rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name.Replace("'", " ")}')");
                     command = new SQLiteCommand(sql, connectionRates);
                     command.ExecuteNonQuery();
 
@@ -169,7 +172,7 @@
 
             try
             {
-                string sql = "Select , RateId, Code, TaxeRate, Name from Rates;";
+                string sql = "Select RateId, Code, TaxRate, Name from Rates;";
 
                 command = new SQLiteCommand(sql, connectionRates);
 

@@ -13,6 +13,7 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Color = System.Drawing.Color;
@@ -123,7 +124,66 @@
             var boarders = country.Borders;
             List<Country> boardersCountry = new List<Country>();
 
-            if (boarders.Count == 0)
+
+            if (boarders != null)
+            {
+                if (boarders.Count == 0)
+                {
+                    boardersCountry.Add(new Country
+                    {
+                        Name = "No borders available",
+                        Image = new BitmapImage(new Uri(@"\Images\no-image-available.jpg", UriKind.Relative))
+
+                    });
+                    Border_info.ItemsSource = boardersCountry;
+                }
+                else
+                {
+                    foreach (var item in boarders)
+                    {
+                        var b = Countries.FirstOrDefault(c => c.Alpha3Code == item);
+                        boardersCountry.Add(b);
+                    }
+                }
+                Border_info.ItemsSource = boardersCountry;
+                string PathImage = Path.Combine($@"{Environment.CurrentDirectory}\MapsGif");
+                DirectoryInfo dir = new DirectoryInfo(PathImage);
+                var files = dir.GetFiles();
+
+                string path = $@"{country.Name}.gif";
+
+
+                try
+                {
+                    FileInfo exists = files.FirstOrDefault(f => f.Name == path);
+                    if (exists != null)
+                    {
+                        if (exists.Exists)
+                        {
+                            string fullPath = $@"{PathImage}\{path}";
+                            MapImage.DataContext = fullPath;
+                        }
+                        else
+                        {
+                            string noimagePath = $@"\Images\no-image-available.jpg";
+                            MapImage.DataContext = noimagePath;
+                        }
+                    }
+                    else
+                    {
+                        string noimagePath = $@"\Images\no-image-available.jpg";
+                        MapImage.DataContext = noimagePath;
+                    }
+
+                }
+                catch
+                {
+
+                    string noimagePath = $@"\Images\no-image-available.jpg";
+                    MapImage.DataContext = noimagePath;
+                }
+            }
+            else
             {
                 boardersCountry.Add(new Country
                 {
@@ -132,54 +192,47 @@
 
                 });
                 Border_info.ItemsSource = boardersCountry;
-            }
-            else
-            {
-                foreach (var item in boarders)
+                string PathImage = Path.Combine($@"{Environment.CurrentDirectory}\MapsGif");
+                DirectoryInfo dir = new DirectoryInfo(PathImage);
+                var files = dir.GetFiles();
+
+                string path = $@"{country.Name}.gif";
+
+
+                try
                 {
-                    var b = Countries.FirstOrDefault(c => c.Alpha3Code == item);
-                    boardersCountry.Add(b);
-                }
-            }
-            Border_info.ItemsSource = boardersCountry;
-
-
-            string PathImage = Path.Combine($@"{Environment.CurrentDirectory}\MapsGif");
-            DirectoryInfo dir = new DirectoryInfo(PathImage);
-            var files = dir.GetFiles();
-
-            string path = $@"{country.Name}.gif";
-
-
-            try
-            {
-                FileInfo exists = files.FirstOrDefault(f => f.Name == path);
-                if (exists != null)
-                {
-                    if (exists.Exists)
+                    FileInfo exists = files.FirstOrDefault(f => f.Name == path);
+                    if (exists != null)
                     {
-                        string fullPath = $@"{PathImage}\{path}";
-                        MapImage.DataContext = fullPath;
+                        if (exists.Exists)
+                        {
+                            string fullPath = $@"{PathImage}\{path}";
+                            MapImage.DataContext = fullPath;
+                        }
+                        else
+                        {
+                            string noimagePath = $@"\Images\no-image-available.jpg";
+                            MapImage.DataContext = noimagePath;
+                        }
                     }
                     else
                     {
                         string noimagePath = $@"\Images\no-image-available.jpg";
                         MapImage.DataContext = noimagePath;
                     }
+
                 }
-                else
+                catch
                 {
+
                     string noimagePath = $@"\Images\no-image-available.jpg";
                     MapImage.DataContext = noimagePath;
                 }
 
             }
-            catch
-            {
 
-                string noimagePath = $@"\Images\no-image-available.jpg";
-                MapImage.DataContext = noimagePath;
-            }
+
+
 
 
 
@@ -464,7 +517,7 @@
             {
                 CountryRate.Add(new CalcRate
                 {
-                    Name = "Informação indísponível",
+                    Name = "Unavailable information",
                 });
                 cb_ActiveCountryRate.ItemsSource = CountryRate;
                 cb_ActiveCountryRate.DisplayMemberPath = "Name";
@@ -485,7 +538,7 @@
             {
                 allRates.Add(new CalcRate
                 {
-                    Name = "Informação indísponível",
+                    Name = "Unavailable information",
                 });
                 cb_AllcountriesRate.ItemsSource = allRates;
                 cb_AllcountriesRate.DisplayMemberPath = "Name";
@@ -505,24 +558,33 @@
             CalcRate origin = (CalcRate)cb_ActiveCountryRate.SelectedItem;
             CalcRate destination = (CalcRate)cb_AllcountriesRate.SelectedItem;
             if (origin != null && destination != null)
+            {
 
                 if (string.IsNullOrWhiteSpace(tb_insertRate.Text))
                 {
-                    MessageBox.Show("Por favor insira um valor a converter");
+                    MessageBox.Show("Insert a value to convert");
                     return;
                 }
 
-            string input = tb_insertRate.Text;
-            if (Regex.IsMatch(input, @"^-?[0-9][0-9,\.]+$"))
-            {
+                string input = tb_insertRate.Text;
+                if (Regex.IsMatch(input, @"^-?[0-9][0-9,\.]+$"))
+                {
 
 
-                tb_rateResult.Text = $"{tb_insertRate.Text} {origin} correspondem a: {Environment.NewLine}          " +
-                $"   {Convert.ToString(decimal.Round(Convert.ToDecimal(UIData.CalculateRate(origin, destination, Convert.ToDecimal(input))), 2))} {destination.Name}";
+                    tb_rateResult.Text = $"{tb_insertRate.Text} {origin} correspond to: {Environment.NewLine}          " +
+                    $"   {Convert.ToString(decimal.Round(Convert.ToDecimal(UIData.CalculateRate(origin, destination, Convert.ToDecimal(input))), 2))} {destination.Name}";
+                }
+                else
+                {
+                    MessageBox.Show("The value to be converted must be numeric");
+                    return;
+                }
+
+
             }
             else
             {
-                MessageBox.Show("O valor a converter tem de ser numerico");
+                MessageBox.Show("You have to choose currencies to convert");
                 return;
             }
         }
@@ -551,7 +613,7 @@
             DataFlow dataFlow = new DataFlow();
             if (!dataFlow.SetConnectionStatus())
             {
-                MessageService.ShowMessage("Erro", "Para poder comentar necessita de conexao a internet");
+                MessageService.ShowMessage("Error", "In order to comment you need an internet connection");
                 return;
             }
             if (ShowCountry.Count == 0)
@@ -570,7 +632,7 @@
                     Comments = tb_post.Text,
                     Date = date
                 };
-                MessageBoxResult result = MessageBox.Show("O seu Post foi realizado com sucesso",
+                MessageBoxResult result = MessageBox.Show("Your Post was successfully completed",
                                            "Confirmation",
                                            MessageBoxButton.YesNo,
                                            MessageBoxImage.Question);
@@ -589,7 +651,7 @@
             }
             else
             {
-                MessageService.ShowMessage("", "Por favor escreva um comentario");
+                MessageService.ShowMessage("", "Please write a comment");
             }
             ShowComment();
         }
@@ -636,7 +698,15 @@
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ChangedButton==MouseButton.Right)
+            {
+                return;
+            }
+            else
+            {
+                this.DragMove();
+            }
+           
         }
     }
 }

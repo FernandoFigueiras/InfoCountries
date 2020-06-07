@@ -29,7 +29,6 @@
                 return new Response
                 {
                     IsSuccess = false,
-                    Message = "Configure a sua ligação à Internet",
                 };
             }
         }
