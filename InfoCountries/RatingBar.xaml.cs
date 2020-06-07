@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace InfoCountries
 {
@@ -25,7 +26,14 @@ namespace InfoCountries
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                return;
+            }
+            else
+            {
+                this.DragMove();
+            }
         }
     }
 }

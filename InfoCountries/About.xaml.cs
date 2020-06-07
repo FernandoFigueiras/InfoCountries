@@ -33,7 +33,14 @@ namespace InfoCountries
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                return;
+            }
+            else
+            {
+                this.DragMove();
+            }
         }
     }
 }

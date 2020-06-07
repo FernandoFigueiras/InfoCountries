@@ -12,7 +12,6 @@
     {
         private SQLiteConnection connectionCountries;
         private SQLiteConnection connectionRates;
-        private SQLiteConnection connectionBorders;
 
         private SQLiteCommand command;
 
