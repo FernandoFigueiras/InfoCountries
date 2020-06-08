@@ -28,12 +28,12 @@
                 Directory.CreateDirectory(dataBasePath);
             }
 
-            string dataPath = dataBasePath + "Countries.sqlite";
+            string dataPathcountries = dataBasePath + "Countries.sqlite";
 
 
             try
             {
-                connectionCountries = new SQLiteConnection("Data Source=" + dataPath);
+                connectionCountries = new SQLiteConnection("Data Source=" + dataPathcountries);
                 connectionCountries.Open();
 
                 string sqlCommand = "create table if not exists Countries (Name nvarchar(250)," +
@@ -48,16 +48,13 @@
                 command.ExecuteNonQuery();
 
 
-                string dataPath2 = dataBasePath + "Rates.sqlite";
-                connectionRates = new SQLiteConnection("Data Source=" + dataPath2);
+                string dataPathRates = dataBasePath + "Rates.sqlite";
+                connectionRates = new SQLiteConnection("Data Source=" + dataPathRates);
                 connectionRates.Open();
 
-                string sqlCommand2 = "create table if not exists Rates(RateId int primary key, Code varchar(3), TaxRate real, Name varchar(150))";
+                string sqlCommand2 = "create table if not exists Rates(RateId int, Code varchar(3), TaxRate real, Name varchar(150))";
                 command = new SQLiteCommand(sqlCommand2, connectionRates);
                 command.ExecuteNonQuery();
-
-
-
             }
             catch (Exception e)
             {
@@ -81,7 +78,7 @@
 
                 foreach (var Country in Countries)
                 {
-                    string sql = string.Format($"insert into countries values ('{Country.Name.Replace("'", " ")}', '{Country.Capital.Replace("'", " ")}', '{Country.Region.Replace("'", " ")}', '{Country.Subregion.Replace("'", " ")}', {Country.Population}, '{Country.Gini}');");
+                    string sql = string.Format($"insert into countries(Name, Capital, Region, Subregion, Population, Gini) values ('{Country.Name.Replace("'", " ")}', '{Country.Capital.Replace("'", " ")}', '{Country.Region.Replace("'", " ")}', '{Country.Subregion.Replace("'", " ")}', {Country.Population}, '{Country.Gini}');");
                         command = new SQLiteCommand(sql, connectionCountries);
                    
                     command.ExecuteNonQuery();
@@ -151,7 +148,7 @@
 
                 foreach (var rate in rates)
                 {
-                    string sql = string.Format($"insert into Rates values ({rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name.Replace("'", " ")}')");
+                    string sql = string.Format($"insert into Rates (RateId, Code, TaxRate, Name) values ({rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name.Replace("'", " ")}')");
                     command = new SQLiteCommand(sql, connectionRates);
                     command.ExecuteNonQuery();
 
