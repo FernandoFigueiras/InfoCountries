@@ -88,7 +88,7 @@
             }
             catch (Exception e)
             {
-                MessageService.ShowMessage("Erro", e.Message);
+                MessageService.ShowMessage("Error", e.Message);
             }
 
         }
@@ -157,7 +157,7 @@
             }
             catch (Exception e)
             {
-                MessageService.ShowMessage("Erro", e.Message);
+                MessageService.ShowMessage("Error", e.Message);
             }
 
         }
@@ -190,7 +190,7 @@
             catch (Exception e)
             {
 
-                MessageService.ShowMessage("Erro", e.Message);
+                MessageService.ShowMessage("Error", e.Message);
             }
             return Rates;
         }
