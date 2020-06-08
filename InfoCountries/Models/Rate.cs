@@ -17,6 +17,5 @@ namespace InfoCountries.Models
 
         public string Name { get; set; }
 
-        
     }
 }

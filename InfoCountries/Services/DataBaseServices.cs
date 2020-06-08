@@ -28,12 +28,12 @@
                 Directory.CreateDirectory(dataBasePath);
             }
 
-            string dataPathcountries = dataBasePath + "Countries.sqlite";
+            string dataPath = dataBasePath + "Countries.sqlite";
 
 
             try
             {
-                connectionCountries = new SQLiteConnection("Data Source=" + dataPathcountries);
+                connectionCountries = new SQLiteConnection("Data Source=" + dataPath);
                 connectionCountries.Open();
 
                 string sqlCommand = "create table if not exists Countries (Name nvarchar(250)," +
@@ -48,13 +48,16 @@
                 command.ExecuteNonQuery();
 
 
-                string dataPathRates = dataBasePath + "Rates.sqlite";
-                connectionRates = new SQLiteConnection("Data Source=" + dataPathRates);
+                string dataPath2 = dataBasePath + "Rates.sqlite";
+                connectionRates = new SQLiteConnection("Data Source=" + dataPath2);
                 connectionRates.Open();
 
                 string sqlCommand2 = "create table if not exists Rates(RateId int, Code varchar(3), TaxRate real, Name varchar(150))";
                 command = new SQLiteCommand(sqlCommand2, connectionRates);
                 command.ExecuteNonQuery();
+
+
+
             }
             catch (Exception e)
             {
