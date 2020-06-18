@@ -476,18 +476,26 @@
         /// </summary>
         private void ShowComment()
         {
-            if (ShowCountry.Count == 0)
+            try
             {
-                return;
+                if (ShowCountry.Count == 0)
+                {
+                    return;
+                }
+                gb_moreInfo.Visibility = Visibility.Collapsed;
+                gb_rate.Visibility = Visibility.Collapsed;
+                comments_details.ItemsSource = null;
+                Country country = ShowCountry.FirstOrDefault();
+                List<Comment> comment = CommentsCountry.Where(c => c.Alphacode == country.Alpha2Code).ToList();
+                tb_comentCountry.DataContext = country;
+                comments_details.ItemsSource = comment;
+                gb_Comments.Visibility = Visibility.Visible;
             }
-            gb_moreInfo.Visibility = Visibility.Collapsed;
-            gb_rate.Visibility = Visibility.Collapsed;
-            comments_details.ItemsSource = null;
-            Country country = ShowCountry.FirstOrDefault();
-            List<Comment> comment = CommentsCountry.Where(c => c.Alphacode == country.Alpha2Code).ToList();
-            tb_comentCountry.DataContext = country;
-            comments_details.ItemsSource = comment;
-            gb_Comments.Visibility = Visibility.Visible;
+            catch
+            {
+
+            }
+           
         }
 
 

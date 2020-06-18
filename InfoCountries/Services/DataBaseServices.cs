@@ -52,7 +52,7 @@
                 connectionRates = new SQLiteConnection("Data Source=" + dataPathRates);
                 connectionRates.Open();
 
-                string sqlCommand2 = "create table if not exists Rates(RateId int, Code varchar(3), TaxRate real, Name varchar(150))";
+                string sqlCommand2 = "create table if not exists Rates(RateId int, Code nvarchar(3), TaxRate real, Name nvarchar(150))";
                 command = new SQLiteCommand(sqlCommand2, connectionRates);
                 command.ExecuteNonQuery();
             }
@@ -148,10 +148,10 @@
 
                 foreach (var rate in rates)
                 {
-                    string sql = string.Format($"insert into Rates (RateId, Code, TaxRate, Name) values ({rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name.Replace("'", " ")}')");
+                    string sql = string.Format($"insert into Rates (RateId, Code, TaxRate, Name) values ({ rate.RateId}, '{rate.Code}', {rate.TaxRate}, '{rate.Name}')");
+                    //MessageBox.Show($"{ rate.RateId}, '{rate.Code}', { rate.TaxRate}, '{rate.Name.Replace("'", " ")}");
                     command = new SQLiteCommand(sql, connectionRates);
                     command.ExecuteNonQuery();
-
                 }
                 connectionRates.Close();
             }

@@ -107,15 +107,23 @@
         /// <returns> Task </returns>
         public async Task PostComments(string baseUrl, string controller, Comment comment)
         {
-
-            var comments = JsonConvert.SerializeObject(comment);
-
-            using (var client = new HttpClient())
+            try
             {
-                var response = await client.PostAsync(
-                    baseUrl + controller + comment.Alphacode,
-                     new StringContent(comments, Encoding.UTF8, "application/json"));
+                var comments = JsonConvert.SerializeObject(comment);
+
+                using (var client = new HttpClient())
+                {
+                    var response = await client.PostAsync(
+                        baseUrl + controller + comment.Alphacode,
+                         new StringContent(comments, Encoding.UTF8, "application/json"));
+                }
             }
+            catch 
+            {
+
+               
+            }
+           
         }
 
         /// <summary>
