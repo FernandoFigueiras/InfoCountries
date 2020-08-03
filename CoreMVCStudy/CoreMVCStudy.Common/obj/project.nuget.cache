@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "k8XWGXq1wDSxp4LcfOxpop2S+Fm4zNHrQhqkjzmHattiE0UyyhfC6xixnOB539jXcTleUBDnxpzQ7XhPLZorxg==",
+  "success": true,
+  "projectFilePath": "C:\\Projects\\CoreMVCStudy\\CoreMVCStudy.Common\\CoreMVCStudy.Common.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\fjafi\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\fjafi\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

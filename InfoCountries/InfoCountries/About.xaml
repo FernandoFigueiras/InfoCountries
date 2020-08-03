@@ -1,0 +1,23 @@
+﻿<Window x:Class="InfoCountries.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InfoCountries"
+        mc:Ignorable="d"
+        Title="About" Height="250" Width="200" WindowStyle="None"
+        WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
+    <Grid>
+        <StackPanel Background="#eee">
+            <TextBlock Margin="20 20 20 0" Text="Developed by" TextAlignment="Center" FontFamily="Sitka Heading"></TextBlock>
+            <TextBlock Margin="20 20 20 0" Text="Fernando Figueiras" TextAlignment="Center" FontFamily="Sitka Heading"></TextBlock>
+            <TextBlock Margin="20 20 20 0" Text="Email: fjafig@gmail.com" TextAlignment="Center" FontFamily="Sitka Heading"></TextBlock>
+            <TextBlock Margin="20 20 20 0" Text="Version 1.2" TextAlignment="Center" FontFamily="Sitka Heading"></TextBlock>
+            <Button x:Name="btn_OK" Grid.Column="2" Foreground="#700005" Background="Transparent" Grid.RowSpan="2" 
+                Margin="20 20 20 0" FontFamily="Century Gothic" FontSize="10" BorderBrush="#EDEEE9" BorderThickness="1"
+                Click="btn_OK_Click">
+                OK
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

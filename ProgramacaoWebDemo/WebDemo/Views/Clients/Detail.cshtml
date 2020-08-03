@@ -1,0 +1,52 @@
+﻿@model WebDemo.Models.Client
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Detail</title>
+</head>
+<body>
+    <div> 
+        <form action="/Clients/SaveClient" method="POST">
+            <fieldset>
+                <legend>Cliente</legend>
+                <b>@ViewBag.Name</b><br />
+                <b>@ViewData["Email"]</b>
+                <div>
+                    <label for="ClientId">Id</label>
+                </div>
+                <div>
+                    <input type="text" value="@Model.ClientId" id="ClientId" name="ClientId" />
+                </div>
+                <div>
+                    <label for="Nome">Nome</label>
+                </div>
+                <div>
+                    <input type="text" value="@Model.Name" id="Name" name="Name" />
+                </div>
+                <div>
+                    <label for="Email">Email</label>
+                </div>
+                <div>
+                    <input type="text" value="@Model.Email" id="Email" name="Email" />
+                </div>
+                <div>
+                    <label for="PhoneNumber">Telefone</label>
+                </div>
+                <div>
+                    <input type="text" value="@Model.PhoneNumber" id="PhoneNumber" name="PhoneNumber" />
+                </div>
+                <p>
+                    <input type="submit" value="Enviar" />
+                </p>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

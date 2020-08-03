@@ -1,0 +1,28 @@
+migration Context
+
+Enable-Migrations -ContectTypeName (nome da bd)
+
+depois de alguma alteração
+Add-Migration (descrição de qual a alteração efectuada sem espaços)
+
+no final para actualizar a db
+Update-DataBase
+
+Isto é tudo feito em consola e vai-se buscar ao tools
+
+
+Para definir as migrações Automáticas
+Enable-Migrations -ContextTypeName (MVCVideo2MarketContext) -EnableAutomaticMigrations
+
+
+
+Caso se mande a base de dados abaixo
+
+Add-Migration Initial
+
+update-Database
+
+No core faz-se
+update-database
+add-migration InitialDb (InitialDb e o nome que se quer dar)
+update-database

@@ -1,0 +1,49 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div> 
+        <h1>View index.cshtml do controller teste</h1>
+        <div>
+            <!--
+            <b>Nome:</b> @ViewData["Nome"]<br />
+            <b>Nome:</b> @ViewData["Email"]<br />
+            <b>Nome:</b> @ViewData["Curso"]<br />
+            <b>Nome:</b> @ViewData["DataInicio"]<br />
+                -->
+        </div>
+        <div>
+            <b>Nome:</b> @ViewBag.Nome <br />
+            <b>Nome:</b> @ViewBag.Email<br />
+            <b>Nome:</b> @ViewBag.Curso<br />
+            <b>Nome:</b> @ViewBag.DataInicio<br />
+        </div>
+        <div>
+            
+            <ul>
+                @foreach (string pais in ViewBag.Paises)
+                { 
+                    <li>@pais</li>
+                }
+            </ul>
+        </div>
+        <div>
+            <ul>
+                @foreach (string pais in (List<string>)ViewData["Paises"])
+                {
+                    <li>@pais</li>
+                }
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

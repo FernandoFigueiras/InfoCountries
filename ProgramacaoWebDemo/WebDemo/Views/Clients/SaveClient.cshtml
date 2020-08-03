@@ -1,0 +1,45 @@
+﻿@model WebDemo.Models.Client
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SaveClient</title>
+</head>
+<body>
+    <div>
+        <fieldset>
+            <legend>Cliente Guardado</legend>
+            <div>
+                <label for="ClientId">Id</label>
+            </div>
+            <div>
+                <input type="text" value="@Model.ClientId" id="ClientId" name="ClientId" />
+            </div>
+            <div>
+                <label for="Nome">Nome</label>
+            </div>
+            <div>
+                <input type="text" value="@Model.Name" id="Name" name="Name" />
+            </div>
+            <div>
+                <label for="Email">Email</label>
+            </div>
+            <div>
+                <input type="text" value="@Model.Email" id="Email" name="Email" />
+            </div>
+            <div>
+                <label for="PhoneNumber">Telefone</label>
+            </div>
+            <div>
+                <input type="text" value="@Model.PhoneNumber" id="PhoneNumber" name="PhoneNumber" />
+            </div>
+        </fieldset>
+    </div>
+</body>
+</html>

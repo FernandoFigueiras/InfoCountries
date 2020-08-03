@@ -1,0 +1,4 @@
+var list = db.Customer.ToList();
+ViewBag.CustumerID=new SelectList(list.OrderBy(c => c.Name).ToList(), "CustomerID", "Name");
+
+Isto passa para o lado da view os dados que se quer, neste caso o Name

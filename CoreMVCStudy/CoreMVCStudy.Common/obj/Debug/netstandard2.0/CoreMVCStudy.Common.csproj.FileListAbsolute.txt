@@ -1,0 +1,9 @@
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\bin\Debug\netstandard2.0\CoreMVCStudy.Common.deps.json
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\bin\Debug\netstandard2.0\CoreMVCStudy.Common.dll
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\bin\Debug\netstandard2.0\CoreMVCStudy.Common.pdb
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\obj\Debug\netstandard2.0\CoreMVCStudy.Common.csprojAssemblyReference.cache
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\obj\Debug\netstandard2.0\CoreMVCStudy.Common.AssemblyInfoInputs.cache
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\obj\Debug\netstandard2.0\CoreMVCStudy.Common.AssemblyInfo.cs
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\obj\Debug\netstandard2.0\CoreMVCStudy.Common.csproj.CoreCompileInputs.cache
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\obj\Debug\netstandard2.0\CoreMVCStudy.Common.dll
+C:\Projects\CoreMVCStudy\CoreMVCStudy.Common\obj\Debug\netstandard2.0\CoreMVCStudy.Common.pdb
