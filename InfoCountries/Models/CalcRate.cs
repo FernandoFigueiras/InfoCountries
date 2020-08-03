@@ -6,16 +6,22 @@ using System.Threading.Tasks;
 
 namespace InfoCountries.Models
 {
-    public class Rate
+    public class CalcRate
     {
-
         public int RateId { get; set; }
-
-        public string Code { get; set; }
-
-        public decimal TaxRate { get; set; }
 
         public string Name { get; set; }
 
+        public string Code { get; set; }
+
+        public string Symbol { get; set; }
+
+        public decimal TaxRate { get; set; }
+
+
+        public override string ToString()
+        {
+            return Name.ToString();
+        }
     }
 }

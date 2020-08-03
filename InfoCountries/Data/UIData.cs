@@ -5,6 +5,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
 
@@ -13,44 +14,84 @@
     /// </summary>
     public static class UIData
     {
+
         /// <summary>
         /// Sets the list of countries to be displayed in the UI
         /// </summary>
         /// <returns>List of countries</returns>
-        public static async Task<List<Country>> GetCountriesList(IProgress<ProgressReportService> progress)
+        public static async Task<List<Country>> GetCountriesListAsync(IProgress<ProgressReportService> progress)
         {
+            
             DataFlow data = new DataFlow();
             List<Country> Countries = new List<Country>();
-            Countries = await data.ReturnData();
-
+            Countries = await data.ReturnCountriesData();
+            
             string PathImage = Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)}\Images\FlagImages");
             DirectoryInfo dir = new DirectoryInfo(PathImage);
             var files = dir.GetFiles();
             ProgressReportService report = new ProgressReportService();
-
+            report.PercComplete = 0;
             if (Countries != null)
             {
-
-                await Task.Run(() =>
+                List<Country> temp = new List<Country>();
+                try
                 {
-                    Parallel.ForEach<Country>(Countries, (country) =>
+                    await Task.Run(() =>
                     {
-                        foreach (var file in files)
+                        Parallel.ForEach<Country>(Countries, (country) =>
                         {
-                            if (file.Name.Contains(country.Name))
+                            foreach (var file in files)
                             {
-                                country.Image = new BitmapImage(new Uri(file.FullName));
-                                country.Image.Freeze();
-                                break;
-                            }
-                        }
-                        report.DataLoaded = Countries;
-                        report.PercComplete = (Countries.Count * 100) / Countries.Count;
-                        progress.Report(report);
+                                if (file.Name.Contains(country.Name))
+                                {
+                                    if (country.Gini == null)
+                                    {
+                                        country.Gini = "Information not available";
+                                    }
+                                    if (country.Capital == "")
+                                    {
+                                        country.Capital = "Information not available";
+                                    }
+                                    if (country.Region == "")
+                                    {
+                                        country.Region = "Information not available";
+                                    }
+                                    if (country.Subregion == "")
+                                    {
+                                        country.Subregion = "Information not available";
+                                    }
 
+                                    country.Image = new BitmapImage(new Uri(file.FullName));
+
+                                    country.Image.Freeze();
+                                    
+                                }
+                            }
+                            
+
+                        });
                     });
-                });
+                }
+                catch
+                {
+
+
+                }
+                
             }
+            var route = Countries.Where(c => c.Image == null);
+
+
+            foreach (var item in route)
+            {
+                Countries.Remove(item);
+                item.Image = new BitmapImage(new Uri(@"\Images\no-image-available.jpg", UriKind.Relative));
+
+                Countries.Add(item);
+                break;
+            }
+            report.PercComplete = 100;
+            progress.Report(report);
             return Countries;
         }
 
@@ -58,36 +99,39 @@
         /// This method returns Rates from API to be presented in UI
         /// </summary>
         /// <returns> List of Rates</returns>
-        public static async Task<List<Rate>> ShowRates()
+        public static async Task<List<Rate>> GetRatesAsync()
         {
             DataFlow RatesData = new DataFlow();
             List<Rate> Rates = await RatesData.GetRatesAPIDataAsync();
             return Rates;
         }
 
-
-
         /// <summary>
-        /// This method searches for specific Rate of a coutry selected
+        /// This method searches for specific Rate of a selected country
         /// </summary>
         /// <param name="country"></param>
         /// <returns>List of string currency name</returns>
-        public static async Task<List<Rate>> ShowCountryRates(Country country)
+        public static List<CalcRate> ShowCountryRates(Country country, List<Rate> rates)
         {
-            List<Rate> Rates = new List<Rate>();
-            Rates = await ShowRates();
-            List<Rate> ratesListCountry = new List<Rate>();
+            List<CalcRate> ratesListCountry = new List<CalcRate>();
 
-            if (Rates != null)
+            if (rates != null && country.Currencies != null)
             {
+
                 foreach (var currency in country.Currencies)
                 {
-                    foreach (var Rate in Rates)
+                    var list = rates.FirstOrDefault(r => r.Code == currency.Code);
+
+                    if (list != null)
                     {
-                        if (currency.Code == Rate.Code)
+                        ratesListCountry.Add(new CalcRate
                         {
-                            ratesListCountry.Add(Rate);//This is the name of the currencies that each country has
-                        }
+                            RateId = list.RateId,
+                            Name = list.Name,
+                            Code = list.Code,
+                            Symbol = currency.Symbol,
+                            TaxRate = list.TaxRate
+                        });
                     }
                 }
             }
@@ -100,40 +144,60 @@
         /// <param name="country"></param>
         /// <param name="OriginRate"></param>
         /// <returns> list of string currency name</returns>
-        public static async Task<List<Rate>> ShowAllCoutryRates(Country country, List<Rate> OriginRate)
+        public static List<CalcRate> ShowAllCoutryRates(Country country, List<Rate> rates)
         {
-            List<Rate> Rates = new List<Rate>();
-            Rates = await ShowRates();
-            List<Rate> AllCountriesRates = new List<Rate>();
-            if (OriginRate.Count != 0)//If no information is available for a specific currency
-            {
+            List<CalcRate> AllCountriesRates = new List<CalcRate>();
 
-                if (Rates != null)
+
+            if (rates != null && country.Currencies != null)
+            {
+                foreach (var currency in country.Currencies)
                 {
-                    foreach (var currency in country.Currencies)
+                    var list = rates.Where(r => r.Code != currency.Code);
+                    foreach (var rate in list)
                     {
-                        foreach (var Rate in Rates)
+
+                        AllCountriesRates.Add(new CalcRate
                         {
-                            if (currency.Code != Rate.Code)
-                            {
-                                AllCountriesRates.Add(Rate);//This is all currencies except the one of the country chosen
-                            }
-                        }
+                            RateId = rate.RateId,
+                            Name = rate.Name,
+                            Code = rate.Code,
+                            Symbol = currency.Symbol,
+                            TaxRate = rate.TaxRate
+                        });
                     }
                 }
             }
             return AllCountriesRates;
         }
 
-
-        public static decimal CalculateRate(Rate origin, Rate destination, decimal value  )
+        /// <summary>
+        /// methos used to calculate a specific rate
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="destination"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static decimal CalculateRate(CalcRate origin, CalcRate destination, decimal value)
         {
             decimal calcRate = 0;
-            if (origin != null && destination !=null)
+            if (origin != null && destination != null)
             {
                 calcRate = value / (decimal)origin.TaxRate * (decimal)destination.TaxRate;
             }
             return calcRate;
+        }
+
+        /// <summary>
+        /// gets a list of Comments to be presented in the UI
+        /// </summary>
+        /// <param name="country"></param>
+        /// <returns></returns>
+        public static async Task<List<Comment>> GetCommentsData()
+        {
+            DataFlow dataflow = new DataFlow();
+            List<Comment> Comments = await dataflow.GetCommentsAPIAsync();
+            return Comments;
         }
 
 

@@ -2,8 +2,10 @@
 {
     using Models;
     using Services;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using System.Web.Management;
 
     /// <summary>
     /// This classe is used to verify if data comes from API or DataBase. And to store data to Database
@@ -12,9 +14,10 @@
     {
         public List<Country> Countries;
         public List<Rate> Rates;
+        public List<Comment> Comments;
         public DataBaseServices dataBaseServices;
 
-        private bool SetConnectionStatus()
+        public bool SetConnectionStatus()
         {
             NetworkService networkService = new NetworkService();
 
@@ -23,20 +26,20 @@
             if (checkconnection.IsSuccess)
             {
                 return true;
+               
             }
             else
             {
-                MessageService.ShowMessage("Erro", checkconnection.Message);
+                
                 return false;
             }
         }
-
-
+        
         /// <summary>
         /// This method searches for an internet connection. If connection is valid gets data from API, if not gets data from Databse
         /// </summary>
         /// <returns>List of Country</returns>
-        public async Task<List<Country>> ReturnData()
+        public async Task<List<Country>> ReturnCountriesData()
         {
             dataBaseServices = new DataBaseServices();
             SetConnectionStatus();
@@ -47,14 +50,16 @@
             }
             else
             {
-                Countries = dataBaseServices.GetDataFromDataBase();
+                MessageService.ShowMessage("Error", "Set up your Internet connection");
+                Countries = dataBaseServices.GetCountriesData();
             }
 
             if (!SetConnectionStatus())
             {
+                
                 if (Countries.Count == 0)
                 {
-                    MessageService.ShowMessage("Error", "Primeira utilização desta aplicação requer uma ligação válida à internet");
+                    MessageService.ShowMessage("Error", "First use of this application requires a valid internet connection");
                 }
             }
             return Countries;
@@ -65,12 +70,13 @@
         /// </summary>
         /// <param name="Countries"></param>
         /// <returns>Task</returns>
-        public async Task SaveData(List<Country> Countries)
+        public async Task SaveData(List<Country> Countries, List<Rate> Rates)
         {
             if (SetConnectionStatus())
             {
                 dataBaseServices = new DataBaseServices();
-                await Task.Run(() => dataBaseServices.SaveDataBase(Countries));
+                await Task.Run(() => dataBaseServices.SaveCountriesData(Countries));
+                await Task.Run(() => dataBaseServices.SaveRatesData(Rates));
             }
         }
 
@@ -80,12 +86,38 @@
         /// <returns>List of Rate</returns>
         public async Task<List<Rate>> GetRatesAPIDataAsync()
         {
+            dataBaseServices = new DataBaseServices();
+            
             if (SetConnectionStatus())
             {
                 Rates = await GetApiData.LoadRatesFromAPIAsync();
             }
+            else
+            {
+               
+                Rates = dataBaseServices.GetRatesData();
+            }
+
             return Rates;
         }
 
+        public async Task PostCommentsData(Country country, Comment comment)
+        {
+            ApiService ApiService = new ApiService();
+            if (SetConnectionStatus())
+            {
+                string Controller = "/api/Comments/";
+                await ApiService.PostComments("http://www.CountriesComments.somee.com", Controller + country.Alpha2Code, comment);
+            }
+        }
+
+        public async Task<List<Comment>> GetCommentsAPIAsync()
+        {
+            if (SetConnectionStatus())
+            {
+                Comments = await GetApiData.LoadApiCommentsAsync();
+            }
+            return Comments;
+        }
     }
 }
